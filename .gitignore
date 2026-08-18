@@ -1,0 +1,34 @@
+# Environnements virtuels
+venv/
+pilotes/jaka/venv_jaka/
+telemetrie/venv_jaka/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Courtier MQTT runtime
+mosquitto/data/
+mosquitto/log/
+
+# Node-RED runtime
+node_red_data/node_modules/
+node_red_data/lib/flows/*.json.bak
+
+# Données générées (pas du code source)
+telemetrie/energie_*.json
+
+# Binaires non portables (spécifiques à la machine)
+pilotes/jaka/jkrc.so
+pilotes/jaka/libjakaAPI.so
+telemetrie/jkrc.so
+telemetrie/libjakaAPI.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets
+.env
+*.pem
