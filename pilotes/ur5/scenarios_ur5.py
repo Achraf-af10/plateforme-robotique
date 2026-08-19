@@ -1,9 +1,15 @@
+#scenarios_ur5.py
 import json
 import os
 import time
+import sys
 
-from effecteurs.pince_2FG7 import pince_close, pince_open
-from ur5.config_ur5 import PLAN_SUP_PICO, PLAN_PLATFORME
+# Ajouter les chemins relatifs
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "effecteurs"))
+sys.path.insert(0, os.path.dirname(__file__))  
+
+from pince_2FG7 import pince_close, pince_open
+from config_ur5 import PLAN_SUP_PICO, PLAN_PLATFORME
 
 # Paramètres de mouvement
 SPEED_J, ACC_J = 0.3, 0.3
@@ -13,7 +19,7 @@ SPEED_L_SLOW, ACC_L_SLOW = 0.05, 0.05
 # Paramètres de la pile et détection
 EPAISSEUR_SUPPORT = 0.0115
 MARGE_DETECTION = 0.02
-MARGE_FORCE = 8.0
+MARGE_FORCE = 15
 
 
 # Fichier d'état persistant
@@ -161,7 +167,7 @@ def prendre_support_L298N(rtde_c, rtde_r, data):
     _aller_a(rtde_c, rtde_r, pt_pose_app)
     rtde_c.moveL(pt_pose, SPEED_L_SLOW, ACC_L_SLOW)
  
-    pince_open(width=45, force=80, speed=100)
+    pince_open(width=47, force=80, speed=100)
  
     # Remontee avant de retourner au depart
     rtde_c.moveL(pt_pose_app, SPEED_L_FAST, ACC_L_FAST)

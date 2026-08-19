@@ -1,11 +1,14 @@
 import sys
 import os
 import signal
+
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "commun"))
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "effecteurs"))
+sys.path.append(os.path.dirname(__file__)) 
+
 import rtde_control
 import rtde_receive
 from client_mqtt import RobotMqttClient
+from scenarios_ur5 import prendre_support_L298N 
 
 UR5_IP = "10.120.0.11"
 
@@ -20,13 +23,13 @@ def cleanup(signum=None, frame=None):
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
-def move_to_point_a():
-    point_a = [0.48187679988574483, -0.1451834444286808, 0.40351652871902666, -2.289334219663615, 2.0242017706495314, -0.11342767788255038]
-    rtde_c.moveL(point_a, speed=0.1, acceleration=0.1)
+def move_to_point_a(data):
+    prendre_support_L298N(rtde_c, rtde_r, data)
 
 def move_to_point_d():
     point_d = [0.48196370064505684, 0.12043598350031744, 0.40348327636507847, -2.2894946260793576, 2.024437833830858, -0.11439462567385185]
     rtde_c.moveL(point_d, speed=0.1, acceleration=0.1)
+
 
 TASKS = {
     "move_to_point_a": move_to_point_a,
@@ -36,7 +39,13 @@ TASKS = {
 def handle_task(data):
     task = data.get("task")
     if task in TASKS:
-        TASKS[task]()
+        fonction = TASKS[task]
+        # Les taches qui ont besoin de "data" (ex: numero de piece) le recoivent ;
+        # les autres (move_to_point_a/d) ne prennent aucun argument.
+        if fonction.__code__.co_argcount == 1:
+            fonction(data)
+        else:
+            fonction()
     else:
         raise ValueError(f"tâche inconnue: {task}")
 

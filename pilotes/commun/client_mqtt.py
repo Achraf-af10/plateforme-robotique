@@ -50,5 +50,5 @@ class RobotMqttClient:
         self.client.publish(self.status_topic, json.dumps(payload))
 
     def run_forever(self):
-        self.client.connect(self.broker, self.port, 60)
+        self.client.connect(self.broker, self.port, 300)
         self.client.loop_forever()

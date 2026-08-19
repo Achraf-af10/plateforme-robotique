@@ -27,7 +27,7 @@ APPROACH_Z   = 0.05                # m — hauteur approche au dessus du trou
 # Parametres de vissage
 Z_FORCE_N   = 20    # N  — force axiale poussee par le tournevis
 TORQUE_NM   = 0.15   # Nm — couple cible
-TOL_OK      = 0.04  # Nm — tolerance acceptable
+TOL_OK      = 0.05  # Nm — tolerance acceptable
 TOL_NOK     = 0.01  # Nm — tolerance echec — arret du cycle
 SLEEP_APRES = 4.0   # s  — attente distributeur apres vissage
 
@@ -43,52 +43,24 @@ SPEED_SLIDER = 0.2
 
 VIS = [
     {
-        "nom"     : "Vis 1 L298N",
-        "pos_p"   : [0.050, 0.013, -0.180, 1.442, -0.741, 0.747],
-        "shank_mm": 40,
-        "length"  : 3.0,
-        "sleep"   : True,
-    },
-    {
-        "nom"     : "Vis 2 L298N",
-        "pos_p"   : [0.110, 0.013, -0.180, 1.442, -0.741, 0.747],
-        "shank_mm": 40,
-        "length"  : 3.0,
-        "sleep"   : True,
-    },
-    {
-        "nom"     : "Vis 3 L298N",
-        "pos_p"   : [0.110, 0.013, -0.120, 1.442, -0.741, 0.747],
-        "shank_mm": 40,
-        "length"  : 3.0,
-        "sleep"   : True,
-    },
-    {
-        "nom"     : "Vis 4 L298N",
-        "pos_p"   : [0.050, 0.013, -0.120, 1.442, -0.741, 0.747],
-        "shank_mm": 40,
-        "length"  : 3.0,
-        "sleep"   : True,
-    },
-    {
         "nom"     : "Vis 5 RAP_PICO",
         "pos_p"   : [0.140, 0.013, -0.120, 1.442, -0.741, 0.747],
         "shank_mm": 40,
-        "length"  : 3.0,
+        "length"  : 4.0,
         "sleep"   : True,
     },
     {
         "nom"     : "Vis 6 RAP_PICO",
         "pos_p"   : [0.160, 0.013, -0.180, 1.442, -0.741, 0.747],
         "shank_mm": 40,
-        "length"  : 3.0,
+        "length"  : 4.0,
         "sleep"   : True,
     },
     {
         "nom"     : "Vis 7 RAP_PICO",
         "pos_p"   : [0.140, 0.013, -0.180, 1.442, -0.741, 0.747],
         "shank_mm": 40,
-        "length"  : 3.0,
+        "length"  : 4.0,
         "sleep"   : False,
     }
 ]
