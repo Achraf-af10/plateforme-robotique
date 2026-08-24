@@ -1,53 +1,38 @@
+"""
+Pilote UR5 : gère la communication MQTT et délègue à UR5 + scenarios.
+Responsabilité : orchestration MQTT uniquement.
+"""
 import sys
 import os
-import signal
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "commun"))
-sys.path.append(os.path.dirname(__file__)) 
+sys.path.insert(0, os.path.dirname(__file__))
 
-import rtde_control
-import rtde_receive
 from client_mqtt import RobotMqttClient
-from scenarios_ur5 import prendre_support_L298N 
+from ur5_robot import UR5
+from scenarios_ur5 import cycle_pose, cycle_pose_grille
+import config_ur5
 
-UR5_IP = "10.120.0.11"
+# Initialiser le robot
+robot = UR5(ip="10.120.0.11")
 
-rtde_c = rtde_control.RTDEControlInterface(UR5_IP)
-rtde_r = rtde_receive.RTDEReceiveInterface(UR5_IP)
-
-def cleanup(signum=None, frame=None):
-    print("Fermeture de la connexion RTDE (ur5)...")
-    rtde_c.disconnect()
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, cleanup)
-signal.signal(signal.SIGTERM, cleanup)
-
-def move_to_point_a(data):
-    prendre_support_L298N(rtde_c, rtde_r, data)
-
-def move_to_point_d():
-    point_d = [0.48196370064505684, 0.12043598350031744, 0.40348327636507847, -2.2894946260793576, 2.024437833830858, -0.11439462567385185]
-    rtde_c.moveL(point_d, speed=0.1, acceleration=0.1)
-
-
+# Définir les tâches disponibles
 TASKS = {
-    "move_to_point_a": move_to_point_a,
-    "move_to_point_d": move_to_point_d,
+    "cycle_pose_bride": lambda data: cycle_pose_grille(robot, grille=config_ur5.BRIDE_MOTEUR),
+    "cycle_pose_sup_pico": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_PICO]),
+    "cycle_pose_sup_l298N": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_L298N]),
 }
-
 def handle_task(data):
+    """Callback MQTT : exécuter la tâche demandée."""
     task = data.get("task")
     if task in TASKS:
-        fonction = TASKS[task]
-        # Les taches qui ont besoin de "data" (ex: numero de piece) le recoivent ;
-        # les autres (move_to_point_a/d) ne prennent aucun argument.
-        if fonction.__code__.co_argcount == 1:
-            fonction(data)
-        else:
-            fonction()
+        try:
+            TASKS[task](data)
+        except Exception as e:
+            print(f"[ur5] Erreur tâche {task} : {e}")
+            raise
     else:
-        raise ValueError(f"tâche inconnue: {task}")
+        raise ValueError(f"Tâche inconnue: {task}")
 
 if __name__ == "__main__":
     client = RobotMqttClient("ur5")

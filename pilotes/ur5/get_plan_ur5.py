@@ -12,60 +12,77 @@ ROBOT_PASS = "easybot"
 SCRIPT_FILE = "/programs/get_plan_ur5.script"
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), "config_ur5.py")
 
-# Plans a recuperer
-PLANS = [
-    "Plan_L298N",
-    "Plan_sup_L298N",
-    "Plan_bride",
-    "Plan_raspico",
-    "Plan_sup1_raspi",
-    "Plan_sup2_raspi",
-    "Plan_sup_pico",
-    "Plan_platforme",
-]
+# Plans a recuperer : nom dans le script UR -> nom de la constante Python
+PLANS = {
+    "Plan_L298N"        : "PLAN_L298N",
+    "Plan_sup_L298N"     : "PLAN_SUP_L298N",
+    "Plan_bride"         : "PLAN_BRIDE",
+    "Plan_raspico"       : "PLAN_RASPICO",
+    "Plan_sup1_raspi"    : "PLAN_SUP1_RASPI",
+    "Plan_sup2_raspi"    : "PLAN_SUP2_RASPI",
+    "Plan_sup_pico"      : "PLAN_SUP_PICO",
+    "Plan_platforme"     : "PLAN_PLATFORME",
+}
 
 
 def recuperer_script():
+    """Recupere le fichier .script depuis le robot via SSH."""
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(ROBOT_IP, username=ROBOT_USER, password=ROBOT_PASS, timeout=10)
+
     sftp = client.open_sftp()
     contenu = sftp.open(SCRIPT_FILE).read().decode("utf-8")
     sftp.close()
     client.close()
+
     return contenu
 
 
 def extraire_plans(contenu):
-    """Extrait toutes les valeurs depuis les lignes global Plan_xxx=p[...]"""
+    """Extrait toutes les valeurs depuis les lignes global Plan_xxx=p[...]."""
     resultats = {}
-    for nom in PLANS:
-        pattern = rf'global\s+{re.escape(nom)}\s*=\s*p\[([^\]]+)\]'
+    for nom_script, nom_config in PLANS.items():
+        pattern = rf'global\s+{re.escape(nom_script)}\s*=\s*p\[([^\]]+)\]'
         match = re.search(pattern, contenu)
         if not match:
-            print(f"  ATTENTION — '{nom}' non trouve dans le script")
+            print(f"  ATTENTION — '{nom_script}' non trouve dans le script")
             continue
         valeurs = [float(v.strip()) for v in match.group(1).split(",")]
-        resultats[nom] = valeurs
-        print(f"  {nom} = {valeurs}")
+        if len(valeurs) != 6:
+            print(f"  ATTENTION — '{nom_script}' format invalide (6 valeurs attendues)")
+            continue
+        resultats[nom_config] = valeurs
+        print(f"  {nom_config} = {valeurs}")
     return resultats
 
 
-def generer_config(plans):
-    """Genere le contenu de config_ur5.py avec tous les plans."""
-    lignes = [
-        "# config_ur5.py",
-        "# Plans recuperes automatiquement depuis le UR5",
-        "# Ne pas modifier manuellement — utiliser get_plan_ur5.py",
-        "",
-    ]
-    for nom, valeurs in plans.items():
-        lignes.append(f"{nom.upper()} = [")
-        lignes.append(f"    {valeurs[0]}, {valeurs[1]}, {valeurs[2]},")
-        lignes.append(f"    {valeurs[3]}, {valeurs[4]}, {valeurs[5]}")
-        lignes.append(f"]")
-        lignes.append("")
-    return "\n".join(lignes)
+def mettre_a_jour_config(plans):
+    """Remplace chaque bloc PLAN_xxx = [...] dans config_ur5.py, sans toucher au reste."""
+    with open(CONFIG_FILE, "r") as f:
+        contenu = f.read()
+
+    for nom_config, valeurs in plans.items():
+        nouvelle_valeur = (
+            f"{nom_config} = [\n"
+            f"    {valeurs[0]}, {valeurs[1]}, {valeurs[2]},\n"
+            f"    {valeurs[3]}, {valeurs[4]}, {valeurs[5]}\n"
+            f"]"
+        )
+
+        pattern = rf"{nom_config}\s*=\s*\[[^\]]+\]"
+        nouveau_contenu, nb_remplacements = re.subn(
+            pattern, nouvelle_valeur, contenu, flags=re.DOTALL
+        )
+
+        if nb_remplacements == 0:
+            print(f"  ATTENTION — '{nom_config}' non trouve dans config_ur5.py (ignore)")
+            continue
+
+        contenu = nouveau_contenu
+
+    with open(CONFIG_FILE, "w") as f:
+        f.write(contenu)
 
 
 def main():
@@ -80,12 +97,9 @@ def main():
         print("Aucun plan trouve — arret")
         return
 
-    contenu_config = generer_config(plans)
+    mettre_a_jour_config(plans)
 
-    with open(CONFIG_FILE, "w") as f:
-        f.write(contenu_config)
-
-    print(f"\nconfig_ur5.py genere avec {len(plans)} plans")
+    print(f"\nconfig_ur5.py mis a jour ({len(plans)} plans)")
 
 
 if __name__ == "__main__":

@@ -1,67 +1,39 @@
+"""
+Pilote UR12e : gère la communication MQTT et délègue à UR12e + scenarios.
+Responsabilité : orchestration MQTT uniquement.
+"""
 import sys
 import os
-import signal
 
-# Ajustement des chemins si nécessaire
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "commun"))
-sys.path.append(os.path.dirname(__file__)) 
+sys.path.insert(0, os.path.dirname(__file__))
 
-
-import rtde_control
-import rtde_receive
-import rtde_io
 from client_mqtt import RobotMqttClient
-from scenarios_ur12e import move
+from ur12e_robot import UR12e
+from scenarios_ur12e import cycle_vissage, cycle_vissage_grille
 import config_ur12e
 
-import sys
-import os
-import signal
+# Initialiser le robot
+robot = UR12e(ip="10.120.0.12")
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "commun"))
-sys.path.append(os.path.dirname(__file__))
-
-import rtde_control
-import rtde_receive
-from client_mqtt import RobotMqttClient
-from scenarios_ur12e import move  # Importe tes scenarios
-
-UR12E_IP = "10.120.0.12"
-
-# Initialisation unique des interfaces RTDE pour tout le processus
-rtde_c = rtde_control.RTDEControlInterface(UR12E_IP)
-rtde_r = rtde_receive.RTDEReceiveInterface(UR12E_IP)
-rtde_io_ = rtde_io.RTDEIOInterface(UR12E_IP)
-
-def cleanup(signum=None, frame=None):
-    print("Fermeture propre de la connexion RTDE (ur12e)...")
-    try:
-        rtde_c.disconnect()
-    except Exception:
-        pass
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, cleanup)
-signal.signal(signal.SIGTERM, cleanup)
-
-def move_to_point_b():
-    move(rtde_c, rtde_r, rtde_io_, config_ur12e)
-
-def move_to_point_e():
-    point_e = [-0.6992066832523436, -0.2544319239003424, 0.3574493183361128, -2.879549786941135, -1.2341247557601733, -0.0699349585606065]
-    rtde_c.moveL(point_e, speed=0.1, acceleration=0.1)
-
+# Définir les tâches disponibles
 TASKS = {
-    "move_to_point_b": move_to_point_b,
-    "move_to_point_e": move_to_point_e,
+    "cycle_vissage_bride": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_BRIDE_MOTEUR, grille=config_ur12e.GRILLE_VIS_8X8),
+    "cycle_vissage_sup_pico": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP_PICO),
+    "cycle_vissage_sup_l298n": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP_L298N),
 }
 
 def handle_task(data):
+    """Callback MQTT : exécuter la tâche demandée."""
     task = data.get("task")
     if task in TASKS:
-        TASKS[task]()
+        try:
+            TASKS[task](data)
+        except Exception as e:
+            print(f"[ur12e] Erreur tâche {task} : {e}")
+            raise
     else:
-        raise ValueError(f"tâche inconnue: {task}")
+        raise ValueError(f"Tâche inconnue: {task}")
 
 if __name__ == "__main__":
     client = RobotMqttClient("ur12e")

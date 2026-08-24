@@ -6,21 +6,21 @@ COURTIER = "localhost"
 orchestrateur = OrchestratorCellule()
 
 CMD_TOPICS = {
-    "ur5_vers_a":   ("cell/robot/ur5/cmd",   {"task": "move_to_point_a"}),
-    "ur12e_vers_b": ("cell/robot/ur12e/cmd", {"task": "move_to_point_b"}),
-    "jaka_vers_c":  ("cell/robot/jaka/cmd",  {"task": "move_to_point_c"}),
-    "ur5_vers_d":   ("cell/robot/ur5/cmd",   {"task": "move_to_point_d"}),
-    "ur12e_vers_e": ("cell/robot/ur12e/cmd", {"task": "move_to_point_e"}),
-    "jaka_vers_f":  ("cell/robot/jaka/cmd",  {"task": "move_to_point_f"}),
+    "ur5_vers_a":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_bride"}),
+    "ur12e_vers_b": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_bride"}),
+    "ur5_vers_c":  ("cell/robot/ur5/cmd",  {"task": "cycle_pose_sup_pico"}),
+    "ur12e_vers_d":   ("cell/robot/ur12e/cmd",   {"task": "cycle_vissage_sup_pico"}),
+    "ur5_vers_e": ("cell/robot/ur5/cmd", {"task": "cycle_pose_sup_l298N"}),
+    "ur12e_vers_f":  ("cell/robot/ur12e/cmd",  {"task": "cycle_vissage_sup_l298n"}),
 }
 
 NEXT_TRANSITION = {
     ("ur5", "ur5_vers_a"):     "a_reached",
     ("ur12e", "ur12e_vers_b"): "b_reached",
-    ("jaka", "jaka_vers_c"):   "c_reached",
-    ("ur5", "ur5_vers_d"):     "d_reached",
-    ("ur12e", "ur12e_vers_e"): "e_reached",
-    ("jaka", "jaka_vers_f"):   "f_reached",
+    ("ur5", "ur5_vers_c"):   "c_reached",
+    ("ur12e", "ur12e_vers_d"):     "d_reached",
+    ("ur5", "ur5_vers_e"): "e_reached",
+    ("ur12e", "ur12e_vers_f"):   "f_reached",
 }
 
 def nettoyer_messages_retenus(client):
