@@ -1,6 +1,17 @@
-# Plateforme Robotique — Cellule Multi-Robots Industrie 4.0
+# Plateforme Robotique — Développement d'une Plateforme Industrie 4.0
 
-Plateforme d'orchestration d'une cellule robotique multi-marques (UR5, UR12e, JAKA S5) pour une tâche d'assemblage automatisée, développée dans le cadre d'un stage de recherche au **CERI SN — IMT Nord Europe**.
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![MQTT](https://img.shields.io/badge/MQTT-Mosquitto-3C5280?style=for-the-badge&logo=eclipsemosquitto&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![NodeRED](https://img.shields.io/badge/Node--RED-Dashboard-8F0000?style=for-the-badge&logo=nodered&logoColor=white)
+![Status](https://img.shields.io/badge/status-en%20d%C3%A9veloppement-yellow?style=for-the-badge)
+
+Plateforme d'orchestration d'une cellule robotique multi-marques (UR5, UR12e, JAKA S5) pour une tâche d'assemblage automatisée.
+
+**Projet** : Développement d'une plateforme Industrie 4.0
+**École** : Polytech Dijon
+**Stage effectué au sein de** : IMT Nord Europe — Équipe CERI SN (Sciences du Numérique)
+**Tuteur de stage** : Julien Motetse
 
 > ⚠️ **Projet en cours de développement.** L'architecture, les scénarios et les scripts évoluent au fil du stage : certains modules seront complétés, réorganisés ou retirés. Ce README sera mis à jour en conséquence.
 
