@@ -147,4 +147,4 @@ Le broker Mosquitto est exposé sur le port `1883` et le dashboard Node-RED sur 
 
 ## 👤 Auteur
 
-**Achraf** — Stage Industrie 4.0 / robotique multi-robots, CERI SN, IMT Nord Europe (avril–septembre 2026)
+**Achraf AHMED FOUATIH** — Stage Industrie 4.0 / robotique multi-robots, CERI SN, IMT Nord Europe (avril–septembre 2026)
