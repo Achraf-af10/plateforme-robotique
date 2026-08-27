@@ -7,8 +7,8 @@ ROBOT_IP = "10.120.0.12"
 # Repere platforme
 # Lire dans : Installation → Features → Plan_platforme
 PLAN_PLATFORME = [
-    -0.6101916853243428, -0.3251482171630037, 0.09725150958541628,
-    1.2102472234599855, 1.204121164478851, 1.2003750805635027
+    -0.6099225424104043, -0.326078899642339, 0.09747705133770845,
+    1.2040359643525829, 1.21412338854044, 1.2093389436617032
 ]
 
 PLAN_GRILLE_VIS = [
@@ -21,17 +21,19 @@ DEPART_P = [-.468389945276, -.265797410841, .347327833617, 2.808481366023,  1.40
 DEPART_Q = [3.9333825026685885, -1.1515688858108355, -2.2034097993905704, -2.927281584613842,  -1.7076195776890835,  4.717135559628818]
 
 # Vitesses de mouvement
-SPEED_J      = 1.3962634015954636  # rad/s
-ACC_J        = 1.0471975511965976  # rad/s²
-SPEED_L_FAST = 1.2                 # m/s — deplacement rapide
-ACC_L_FAST   = 0.25                # m/s²
-SPEED_L_SLOW = 0.3                 # m/s — approche lente
-ACC_L_SLOW   = 0.1                 # m/s²
-APPROACH_Z   = 0.05                # m — hauteur approche au dessus du trou
+SPEED_J      = 0.349066              # rad/s
+ACC_J        = 0.261799              # rad/s²
+SPEED_L_FAST = 0.8                   # m/s — deplacement rapide
+ACC_L_FAST   = 0.3                   # m/s²
+SPEED_L_SLOW = 0.02                  # m/s — approche lente
+ACC_L_SLOW   = 0.015                 # m/s²
+APPROACH_Z   = 0.05                  # m — hauteur approche au dessus du trou
+
+
 
 # Parametres de vissage
 Z_FORCE_N   = 20    # N  — force axiale poussee par le tournevis
-TOL_OK      = 0.07  # Nm — tolerance acceptable
+TOL_OK      = 0.1   # Nm — tolerance acceptable
 TOL_NOK     = 0.01  # Nm — tolerance echec — arret du cycle
 SLEEP_APRES = 4.0   # s  — attente distributeur apres vissage
 
@@ -42,14 +44,20 @@ ATT_PRES_VIS_P    = [-0.183842896087681, -0.3303056674200616, 0.1303807770296967
 POS_RECUP_VIS_P   = [-0.18383460381880662, -0.33032291856269497, 0.1068219865477667, 2.1648972497081194, 2.2721188342461427, 0.051841055658842304]
 
 
-SPEED_L_PICKUP = 1.2
-ACC_L_PICKUP   = 0.25
+SPEED_L_PICKUP = 0.2
+ACC_L_PICKUP   = 0.15
 
 CAPTEUR_PRES_VIS_PIN = 0  # entrée digitale
 
 
 # Vitesse globale du robot (0.0 a 1.0)
-SPEED_SLIDER = 0.2
+SPEED_SLIDER = 0.5
+
+import os
+
+# --- Dossier de sauvegarde des états ---
+DOSSIER_ETATS = os.path.join(os.path.dirname(__file__), "etats")
+os.makedirs(DOSSIER_ETATS, exist_ok=True)  # Crée le dossier s'il n'existe pas
 
 # Declaration des vis
 # pos_p : [x(m), y(m), z(m), rx(rad), ry(rad), rz(rad)]
@@ -123,33 +131,33 @@ VIS_SUP_L298N = [
 VIS_BRIDE_MOTEUR = [
  {
         "nom"     : "Vis 1 bride 1",
-        "pos_p"   : [-0.0075, 0.00828, -0.058, 1.442, -0.741, 0.747],
-        "shank_mm": 50,
-        "length"  : 3.0,
+        "pos_p"   : [-0.0075, -0.0025, -0.058, 1.442, -0.741, 0.747],
+        "shank_mm": 35,
+        "length"  : 9.0,
         "torque_nm":0.15,
         "sleep"   : False,
     },
     {
         "nom"     : "Vis 2 bride 1",
-        "pos_p"   : [-0.0075, 0.00828, -0.122, 1.442, -0.741, 0.747],
-        "shank_mm": 50,
-        "length"  : 3.0,
+        "pos_p"   : [-0.0075, -0.0025, -0.122, 1.442, -0.741, 0.747],
+        "shank_mm": 35,
+        "length"  : 9.0,
         "torque_nm":0.15,
         "sleep"   : False,
     },
     {
         "nom"     : "Vis 1 bride 2",
-        "pos_p"   : [0.1675, 0.00828, -0.058, 1.442, -0.741, 0.747],
-        "shank_mm": 50,
-        "length"  : 3.0,
+        "pos_p"   : [0.1675, -0.0025, -0.058, 1.442, -0.741, 0.747],
+        "shank_mm": 35,
+        "length"  : 9.0,
         "torque_nm":0.15,
         "sleep"   : False,
     },
     {
         "nom"     : "Vis 2 bride 2",
-        "pos_p"   : [0.1675, 0.00828, -0.122, 1.442, -0.741, 0.747],
-        "shank_mm": 50,
-        "length"  : 3.0,
+        "pos_p"   : [0.1675, -0.0025, -0.122, 1.442, -0.741, 0.747],
+        "shank_mm": 35,
+        "length"  : 9.0,
         "torque_nm":0.15,
         "sleep"   : False,
     }
@@ -172,5 +180,5 @@ GRILLE_VIS_8X8 = {
     "nb_lignes"    : 8,
     "nb_colonnes"  : 8,
     "sauter_centre": False,
-    "etat_file"    : "etat_grille_vis_8x8.json",
+    "etat_file"    : os.path.join(DOSSIER_ETATS, "etat_grille_vis_8x8.json"),
 }

@@ -12,6 +12,7 @@ class UR5:
         self.ip = ip
         self.rtde_c = None
         self.rtde_r = None
+        self.rtde_io = None
         self._connect()
         signal.signal(signal.SIGINT, self._cleanup)
         signal.signal(signal.SIGTERM, self._cleanup)
@@ -75,3 +76,5 @@ class UR5:
     def pose_trans(self, from_pose, to_pose):
         """Transformer une pose d'un repère à l'autre."""
         return self.rtde_c.poseTrans(from_pose, to_pose)
+    
+

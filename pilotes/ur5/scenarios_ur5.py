@@ -21,7 +21,7 @@ from config_ur5 import (
     SPEED_L_RETRAIT, ACC_L_RETRAIT,
     EPAISSEUR_SUPPORT, MARGE_DETECTION,
     MARGE_FORCE, TIMEOUT_CONTACT,
-    PINCE_FORCE, PINCE_SPEED,
+    PINCE_FORCE, PINCE_SPEED,SPEED_SLIDER
 )
 
 
@@ -34,12 +34,23 @@ def initialiser_pile(support, nb_support):
 
 def _index_courant(support):
     etat_file = support["etat_file"]
+    
+    # Si le fichier n'existe pas, on initialise la pile avec le nombre par défaut
     if not os.path.exists(etat_file):
-        raise RuntimeError(f"Pile non initialisee ({support['nom']}).")
+        # On récupère 'nb_support' du dictionnaire (ex: support['nb_support'] ou une valeur par défaut)
+        nb_support = support.get("nb_support", 5) 
+        initialiser_pile(support, nb_support)
+
     with open(etat_file) as f:
         etat = json.load(f)
+
+    # Sécurité si le fichier JSON est corrompu ou incomplet
     if "prochain_index" not in etat:
-        raise RuntimeError(f"Pile non initialisee ({support['nom']}).")
+        nb_support = support.get("nb_support", 5)
+        initialiser_pile(support, nb_support)
+        with open(etat_file) as f:
+            etat = json.load(f)
+
     return etat["prochain_index"], etat["nb_support"]
 
 

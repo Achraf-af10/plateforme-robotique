@@ -10,8 +10,8 @@ PLAN_L298N = [
 ]
 
 PLAN_SUP_L298N = [
-    0.25859946563812797, 0.10128196143332684, 0.055435528094722825,
-    -0.001612208305453404, 0.0143345771339896, -0.0014386641824506348
+    0.2583355832413213, 0.1008712811402028, 0.05526682991115017,
+    -0.0029044534828139173, 0.00986015656214554, -0.003402793806365101
 ]
 
 PLAN_BRIDE = [
@@ -35,13 +35,13 @@ PLAN_SUP2_RASPI = [
 ]
 
 PLAN_SUP_PICO = [
-    0.3546446401400102, 0.13131224931554597, 0.054551173955026816,
-    0.01065775009190746, 0.018925480126909335, -0.006039246206596588
+    0.354603597794066, 0.1305679601685348, 0.05432480830105285,
+    -0.0006821406628018361, 0.006154342201653752, 0.00031274255227912843
 ]
 
 PLAN_PLATFORME = [
-    0.20459706978239514, 0.529681927830157, 0.09814791481663673,
-    -2.223279984894965, -2.2032471677717047, -0.0022877855287012864
+    0.20686682304554002, 0.5271760788594813, 0.0989559426911131,
+    -2.212125927979211, -2.222899956105486, -0.006495108118432681
 ]
 
 # Position de depart
@@ -51,16 +51,18 @@ DEPART_Q = [
 ]
 
 # Vitesses de mouvement
-SPEED_J       = 0.3
-ACC_J         = 0.3
-SPEED_L_SLOW  = 0.05
-ACC_L_SLOW    = 0.05
-SPEED_L_RETRAIT = 0.1
-ACC_L_RETRAIT   = 0.1
+SPEED_J       = 0.5
+ACC_J         = 0.8
+SPEED_L_SLOW  = 0.02
+ACC_L_SLOW    = 0.04
+SPEED_L_RETRAIT = 0.15
+ACC_L_RETRAIT   = 0.15
 
-# Geometrie
-EPAISSEUR_SUPPORT = 0.0115
-MARGE_DETECTION   = 0.04
+# Geometrie & Piles
+EPAISSEUR_SUPPORT  = 0.0115
+MARGE_DETECTION    = 0.04
+NBR_SUPPORT_PICO   = 5
+NBR_SUPPORT_L298N  = 5
 
 # Detection de contact
 MARGE_FORCE      = 15.0  # N
@@ -70,21 +72,31 @@ TIMEOUT_CONTACT  = 8.0   # s
 PINCE_FORCE = 80
 PINCE_SPEED = 100
 
+SPEED_SLIDER = 0.9
+
 # Declaration des supports
 # plan_prise / plan_pose : reperes ou sont exprimes pt_prise / pt_pose
 # pt_prise, pt_pose      : [x, y, z, rx, ry, rz] dans leur repere local
 # ouverture_prise/pose   : ouverture de pince (mm) a la prise / a la pose
 # etat_file              : fichier JSON de suivi de pile pour ce support
+# nb_support             : nombre initial de pieces dans la pile
+
+import os
+
+# --- Dossier de sauvegarde des états ---
+DOSSIER_ETATS = os.path.join(os.path.dirname(__file__), "etats")
+os.makedirs(DOSSIER_ETATS, exist_ok=True)  # Crée le dossier s'il n'existe pas
 
 SUPPORT_PICO = {
     "nom"            : "Support Pico",
     "plan_prise"     : PLAN_SUP_PICO,
     "pt_prise"       : [0.03104, 0.06274, 0.03722, 2.333, -2.169, 0.087],
     "plan_pose"      : PLAN_PLATFORME,
-    "pt_pose"        : [0.03, 0.01272, 0.00286, 0.031, 0.035, 1.513],
+    "pt_pose"        : [0.02992, 0.01227,0.0045,0.018,0.012,1.513],
     "ouverture_prise": 40,
     "ouverture_pose" : 47,
-    "etat_file"      : "etat_pile_support_pico.json",
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_pico.json"),
+    "nb_support"     : NBR_SUPPORT_PICO,
 }
 
 SUPPORT_L298N = {
@@ -92,10 +104,11 @@ SUPPORT_L298N = {
     "plan_prise"     : PLAN_SUP_L298N,
     "pt_prise"       : [0.03193, 0.10632, 0.03824, 2.332, -2.178, 0.068],
     "plan_pose"      : PLAN_PLATFORME,
-    "pt_pose"        : [0.02864, 0.08059, 0.00362, 0.008, -0.093, -3.194],
+    "pt_pose"        : [0.02850, 0.08160, 0.00455, 0.008, -0.1, -3.194],
     "ouverture_prise": 71,
     "ouverture_pose" : 73,
-    "etat_file"      : "etat_pile_support_l298n.json",
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_l298n.json"),
+    "nb_support"     : NBR_SUPPORT_L298N,
 }
 
 
@@ -117,14 +130,13 @@ BRIDE_MOTEUR = {
     "sauter_centre"  : False,
     "plan_pose"      : PLAN_PLATFORME,
     "pts_pose"       : [
-        [0.08895,0.15812,-0.01526,0.073,-0.004,-0.052],
-        [0.08974,0.00585,-0.01295,0.0009,0.046,3.064], 
-        
+        [0.08933,0.15818,-0.01076,0.073,-0.004,-0.052],
+        [0.08810,0.00597,-0.00833,0.009,0.046,3.064], 
     ],
     "ouverture_prise": 50,
     "ouverture_pose" : 55, 
     "nb_par_cycle"   : 2,
-    "etat_file"      : "etat_grille_bride_moteur.json",
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_grille_bride_moteur.json"),
 }
 
 CARTE_L298N = {
@@ -138,10 +150,10 @@ CARTE_L298N = {
     "sauter_centre"  : True,
     "plan_pose"      : PLAN_PLATFORME,
     "pts_pose"       : [
-        [0.03, 0.01, 0.003, 0.031, 0.035, 1.513], #A AJUSTER
+        [0.03, 0.01, 0.003, 0.031, 0.035, 1.513], # A AJUSTER
     ],
-    "ouverture_prise": 40, #
-    "ouverture_pose" : 47, #
+    "ouverture_prise": 40,
+    "ouverture_pose" : 47,
     "nb_par_cycle"   : 1,
-    "etat_file"      : "etat_grille_carte_l298n.json",
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_grille_carte_l298n.json"),
 }

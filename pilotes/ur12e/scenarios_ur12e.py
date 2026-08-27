@@ -42,7 +42,7 @@ def _prendre_vis(robot, vis):
     """Va au poste distributeur, attend la vis, et la prend avec la visseuse."""
     # Approche du distributeur
     robot.moveJ(POS_AVANT_DISTR_Q, SPEED_J, ACC_J)
-    move_shank(z_pos_mm=20.0, tool_index=0)
+    move_shank(z_pos_mm=20, tool_index=0)
     robot.moveL(ATT_PRES_VIS_P, SPEED_L_PICKUP, ACC_L_PICKUP)
 
     # Attente de la présence de la vis (capteur digital)
@@ -107,7 +107,7 @@ def _visser_une_vis(robot, vis):
     if abs(achieved - vis["torque_nm"]) < TOL_OK:
         print(f"  {vis['nom']} → serree")
         if vis["sleep"]:
-            move_shank(z_pos_mm=30.0, tool_index=0)
+            move_shank(z_pos_mm=30, tool_index=0)
             time.sleep(SLEEP_APRES)
         return True
 
@@ -131,6 +131,7 @@ def cycle_vissage(robot, vis_list):
             return False
 
     print("\n=== Cycle terminé — toutes les vis serrées ===")
+    _aller_a(robot, DEPART_P)
     return True
 
 
@@ -152,7 +153,7 @@ def _prendre_vis_grille(robot, vis, grille, indice):
     # Approche au-dessus de la vis dans la grille
     q = robot.get_inverse_kinematics(pos_avant, qnear=robot.get_actual_q())
     robot.moveJ(q, SPEED_J, ACC_J)
-    move_shank(z_pos_mm=30.0, tool_index=0) #########
+    move_shank(z_pos_mm=30, tool_index=0) #########
 
     # Descente directe sur la vis
     robot.moveL(pos_vis, SPEED_L_SLOW, ACC_L_SLOW)
@@ -243,4 +244,5 @@ def cycle_vissage_grille(robot, vis_list, grille):
             return False
 
     print("\n=== Cycle terminé — toutes les vis serrées ===")
+    _aller_a(robot, DEPART_P)
     return True

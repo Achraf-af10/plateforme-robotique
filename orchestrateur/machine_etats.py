@@ -23,6 +23,3 @@ class OrchestratorCellule:
         self.machine.add_transition("e_reached", "ur5_vers_e", "ur12e_vers_f")
         self.machine.add_transition("f_reached", "ur12e_vers_f", "done")
         self.machine.add_transition("fault", "*", "error")
-
-
-
