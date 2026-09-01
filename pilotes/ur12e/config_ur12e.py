@@ -51,19 +51,19 @@ CAPTEUR_PRES_VIS_PIN = 0  # entrée digitale
 
 
 # Vitesse globale du robot (0.0 a 1.0)
-SPEED_SLIDER = 0.5
+SPEED_SLIDER = 0.8
 
 import os
 
-# --- Dossier de sauvegarde des états ---
-DOSSIER_ETATS = os.path.join(os.path.dirname(__file__), "etats")
-os.makedirs(DOSSIER_ETATS, exist_ok=True)  # Crée le dossier s'il n'existe pas
+# Remonte d'un niveau pour cibler 'pilotes/etats'
+DOSSIER_ETATS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "etats_json"))
+os.makedirs(DOSSIER_ETATS, exist_ok=True)
 
 # Declaration des vis
 # pos_p : [x(m), y(m), z(m), rx(rad), ry(rad), rz(rad)]
 # shank_mm : position de la tige du tournevis en mm
 # length   : longueur de vissage en mm
-# "torque_nm": couple cible en Nm
+# torque_nm: couple cible en Nm
 # sleep    : True = attendre le distributeur apres vissage
 
 VIS_SUP_PICO = [
@@ -82,14 +82,6 @@ VIS_SUP_PICO = [
         "length"  : 4.0,
         "torque_nm":0.15,
         "sleep"   : False,
-    },
-    {
-        "nom"     : "Vis 7 SUP_PICO",
-        "pos_p"   : [0.140, 0.013, -0.180, 1.442, -0.741, 0.747],
-        "shank_mm": 40,
-        "length"  : 4.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
     }
 ]
 
@@ -103,24 +95,8 @@ VIS_SUP_L298N = [
         "sleep"   : False,
     },
     {
-        "nom"     : "Vis 2 SUP_L298N",
-        "pos_p"   : [0.110, 0.013, -0.180, 1.442, -0.741, 0.747],
-        "shank_mm": 40,
-        "length"  : 4.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
-    {
         "nom"     : "Vis 3 SUP_L298N",
         "pos_p"   : [0.110, 0.013, -0.120, 1.442, -0.741, 0.747],
-        "shank_mm": 40,
-        "length"  : 4.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
-    {
-        "nom"     : "Vis 4 SUP_L298N",
-        "pos_p"   : [0.050, 0.013, -0.120, 1.442, -0.741, 0.747],
         "shank_mm": 40,
         "length"  : 4.0,
         "torque_nm":0.15,
@@ -129,25 +105,10 @@ VIS_SUP_L298N = [
 ]
 
 VIS_BRIDE_MOTEUR = [
- {
-        "nom"     : "Vis 1 bride 1",
-        "pos_p"   : [-0.0075, -0.0025, -0.058, 1.442, -0.741, 0.747],
-        "shank_mm": 35,
-        "length"  : 9.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
+
     {
         "nom"     : "Vis 2 bride 1",
         "pos_p"   : [-0.0075, -0.0025, -0.122, 1.442, -0.741, 0.747],
-        "shank_mm": 35,
-        "length"  : 9.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
-    {
-        "nom"     : "Vis 1 bride 2",
-        "pos_p"   : [0.1675, -0.0025, -0.058, 1.442, -0.741, 0.747],
         "shank_mm": 35,
         "length"  : 9.0,
         "torque_nm":0.15,

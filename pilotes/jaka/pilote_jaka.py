@@ -1,48 +1,53 @@
+"""
+Pilote JAKA : gère la communication MQTT et délègue aux scenarios.
+Responsabilité : orchestration MQTT uniquement.
+"""
 import sys
 import os
 import signal
-import time
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "commun"))
 import jkrc
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "commun"))
+sys.path.insert(0, os.path.dirname(__file__))
+
 from client_mqtt import RobotMqttClient
+from scenarios_jaka import pick_and_place
 
-JAKA_IP = "10.120.0.13"
+# Initialiser la connexion au robot
+robot = jkrc.RC("10.120.0.13")
+if robot.login()[0] != 0:
+    print("[jaka] Erreur connexion")
+    sys.exit(1)
 
-robot = jkrc.RC(JAKA_IP)
-robot.login()
 robot.power_on()
 robot.enable_robot()
+print("[jaka] Connecté")
 
 def cleanup(signum=None, frame=None):
-    print("Fermeture de la connexion JAKA...")
+    """Fermeture propre."""
+    print("[jaka] Fermeture connexion...")
     robot.logout()
     sys.exit(0)
 
 signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
-        
-def move_to_point_c():
-    point_c = [1.7388542253407, 1.2955673064333557, 1.5242288219560445, 1.8926079559748334, -1.5707928093415555, 3.3096465110834887]
-    robot.joint_move(point_c, 0, True, 1.0)
-    point_f = [1.4738710124401888, 1.3598507487474776, 2.1521663365868333, 1.2003992163344779, -1.5707928093415555, 3.044663298182978]
-    robot.joint_move(point_f, 0, True, 1.0)
-    point_c = [1.7388542253407, 1.2955673064333557, 1.5242288219560445, 1.8926079559748334, -1.5707928093415555, 3.3096465110834887]
-    robot.joint_move(point_c, 0, True, 1.0)
-def move_to_point_f():
-    point_f = [1.4738710124401888, 1.3598507487474776, 2.1521663365868333, 1.2003992163344779, -1.5707928093415555, 3.044663298182978]
-    robot.joint_move(point_f, 0, True, 1.0)
+# Définir les tâches disponibles
 TASKS = {
-    "move_to_point_c": move_to_point_c,
-    "move_to_point_f": move_to_point_f,
+    "cycle_pose_sup_pico": lambda data: pick_and_place(robot),
 }
 
 def handle_task(data):
+    """Callback MQTT : exécuter la tâche demandée."""
     task = data.get("task")
     if task in TASKS:
-        TASKS[task]()
+        try:
+            TASKS[task](data)
+        except Exception as e:
+            print(f"[jaka] Erreur tâche {task} : {e}")
+            raise
     else:
-        raise ValueError(f"tâche inconnue: {task}")
+        raise ValueError(f"Tâche inconnue: {task}")
 
 if __name__ == "__main__":
     client = RobotMqttClient("jaka")

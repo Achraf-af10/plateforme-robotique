@@ -66,7 +66,7 @@ NBR_SUPPORT_L298N  = 5
 
 # Detection de contact
 MARGE_FORCE      = 15.0  # N
-TIMEOUT_CONTACT  = 8.0   # s
+TIMEOUT_CONTACT  = 20.0   # s
 
 # Pince
 PINCE_FORCE = 80
@@ -83,9 +83,9 @@ SPEED_SLIDER = 0.9
 
 import os
 
-# --- Dossier de sauvegarde des états ---
-DOSSIER_ETATS = os.path.join(os.path.dirname(__file__), "etats")
-os.makedirs(DOSSIER_ETATS, exist_ok=True)  # Crée le dossier s'il n'existe pas
+# Remonte d'un niveau pour cibler 'pilotes/etats'
+DOSSIER_ETATS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "etats_json"))
+os.makedirs(DOSSIER_ETATS, exist_ok=True)
 
 SUPPORT_PICO = {
     "nom"            : "Support Pico",
@@ -105,7 +105,7 @@ SUPPORT_L298N = {
     "pt_prise"       : [0.03193, 0.10632, 0.03824, 2.332, -2.178, 0.068],
     "plan_pose"      : PLAN_PLATFORME,
     "pt_pose"        : [0.02850, 0.08160, 0.00455, 0.008, -0.1, -3.194],
-    "ouverture_prise": 71,
+    "ouverture_prise": 70,
     "ouverture_pose" : 73,
     "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_l298n.json"),
     "nb_support"     : NBR_SUPPORT_L298N,
@@ -142,7 +142,7 @@ BRIDE_MOTEUR = {
 CARTE_L298N = {
     "nom"            : "Carte L298N",
     "plan_prise"     : PLAN_L298N,        
-    "pt_origine"     : [0.02, 0.05, 0.02, 2.333, -2.169, 0.087],
+    "pt_origine"     : [0.0, 0.0, 0.02, 2.333, -2.169, 0.087],
     "pas_x"          : 0.025,
     "pas_y"          : 0.025,
     "nb_lignes"      : 3,
