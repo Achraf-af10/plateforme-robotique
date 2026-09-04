@@ -12,6 +12,7 @@ CMD_TOPICS = {
     "ur12e_vers_d":   ("cell/robot/ur12e/cmd",   {"task": "cycle_vissage_sup_pico"}),
     "ur5_vers_e": ("cell/robot/ur5/cmd", {"task": "cycle_pose_sup_l298N"}),
     "ur12e_vers_f":  ("cell/robot/ur12e/cmd",  {"task": "cycle_vissage_sup_l298n"}),
+    "ur5_vers_j":  ("cell/robot/ur5/cmd",  {"task": "cycle_pose_carte_l298N"}),
 }
 
 NEXT_TRANSITION = {
@@ -21,6 +22,7 @@ NEXT_TRANSITION = {
     ("ur12e", "ur12e_vers_d"):     "d_reached",
     ("ur5", "ur5_vers_e"): "e_reached",
     ("ur12e", "ur12e_vers_f"):   "f_reached",
+    ("ur5", "ur5_vers_j"): "j_reached",
 }
 
 def nettoyer_messages_retenus(client):

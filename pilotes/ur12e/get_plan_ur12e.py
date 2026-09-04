@@ -15,8 +15,9 @@ CONFIG_FILE = os.path.join(os.path.dirname(__file__), "config_ur12e.py")
 
 # Plans a recuperer : nom dans le script UR -> nom de la constante Python
 PLANS = {
-    "Plan_platforme"    : "PLAN_PLATFORME",
-    "Plan_grille_vis"   : "PLAN_GRILLE_VIS",
+    "Plan_dessous"    : "PLAN_DESSOUS",
+    "Plan_dessus"     : "PLAN_DESSUS",
+    "Plan_grille_vis" : "PLAN_GRILLE_VIS",
 }
 
 

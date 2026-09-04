@@ -15,7 +15,7 @@ from grille_utils import (
     indice_courant_grille, consommer_element_grille,
 )
 from config_ur12e import (
-    PLAN_PLATFORME, DEPART_P,
+    PLAN_DESSOUS, DEPART_P,
     SPEED_J, ACC_J, SPEED_L_FAST, ACC_L_FAST,
     SPEED_L_SLOW, ACC_L_SLOW,
     APPROACH_Z, Z_FORCE_N,
@@ -29,7 +29,7 @@ from config_ur12e import (
 
 def _vers_base(robot, point_platforme):
     """Transforme un point du repère plateforme vers le repère base robot."""
-    return robot.pose_trans(PLAN_PLATFORME, point_platforme)
+    return robot.pose_trans(PLAN_DESSOUS, point_platforme)
 
 
 def _aller_a(robot, pos_base):

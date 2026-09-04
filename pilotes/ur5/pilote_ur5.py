@@ -21,6 +21,7 @@ TASKS = {
     "cycle_pose_bride": lambda data: cycle_pose_grille(robot, grille=config_ur5.BRIDE_MOTEUR),
     "cycle_pose_sup_pico": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_PICO]),
     "cycle_pose_sup_l298N": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_L298N]),
+    "cycle_pose_carte_l298N": lambda data: cycle_pose(robot, support_list=[config_ur5.CARTE_L298N]),
 }
 def handle_task(data):
     """Callback MQTT : exécuter la tâche demandée."""

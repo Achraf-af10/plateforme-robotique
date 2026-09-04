@@ -21,7 +21,8 @@ PLANS = {
     "Plan_sup1_raspi"    : "PLAN_SUP1_RASPI",
     "Plan_sup2_raspi"    : "PLAN_SUP2_RASPI",
     "Plan_sup_pico"      : "PLAN_SUP_PICO",
-    "Plan_platforme"     : "PLAN_PLATFORME",
+    "Plan_dessous"     : "PLAN_DESSOUS",
+    "Plan_dessus"      : "PLAN_DESSUS",
 }
 
 

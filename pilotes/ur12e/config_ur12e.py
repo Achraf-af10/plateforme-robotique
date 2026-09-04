@@ -5,10 +5,15 @@
 ROBOT_IP = "10.120.0.12"
 
 # Repere platforme
-# Lire dans : Installation → Features → Plan_platforme
-PLAN_PLATFORME = [
-    -0.6099225424104043, -0.326078899642339, 0.09747705133770845,
-    1.2040359643525829, 1.21412338854044, 1.2093389436617032
+# Lire dans : Installation → Features → Plan_dessous
+PLAN_DESSOUS = [
+    -0.6201871248013155, -0.17022384174839322, 0.13728289143765787,
+    -0.02843274018595616, -3.1228127121417564, -0.007974036513873867
+]
+
+PLAN_DESSUS = [
+    -0.617124325993609, 0.11788606607871682, 0.1306854902945708,
+    -0.005727143696167871, -3.1062139314218142, 0.013074394878630968
 ]
 
 PLAN_GRILLE_VIS = [
@@ -51,7 +56,7 @@ CAPTEUR_PRES_VIS_PIN = 0  # entrée digitale
 
 
 # Vitesse globale du robot (0.0 a 1.0)
-SPEED_SLIDER = 0.8
+SPEED_SLIDER = 0.6
 
 import os
 
@@ -69,7 +74,7 @@ os.makedirs(DOSSIER_ETATS, exist_ok=True)
 VIS_SUP_PICO = [
     {
         "nom"     : "Vis 5 SUP_PICO",
-        "pos_p"   : [0.140, 0.013, -0.120, 1.442, -0.741, 0.747],
+        "pos_p"   : [0.020, 0.120, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
         "torque_nm":0.15,
@@ -77,7 +82,15 @@ VIS_SUP_PICO = [
     },
     {
         "nom"     : "Vis 6 SUP_PICO",
-        "pos_p"   : [0.160, 0.013, -0.180, 1.442, -0.741, 0.747],
+        "pos_p"   : [0.020, 0.180, -0.0070, 0 ,0 ,3.016],
+        "shank_mm": 40,
+        "length"  : 4.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Vis 7 SUP_PICO",
+        "pos_p"   : [0.0, 0.180, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
         "torque_nm":0.15,
@@ -88,7 +101,15 @@ VIS_SUP_PICO = [
 VIS_SUP_L298N = [
  {
         "nom"     : "Vis 1 SUP_L298N",
-        "pos_p"   : [0.050, 0.013, -0.180, 1.442, -0.741, 0.747],
+        "pos_p"   : [0.050, 0.120, -0.0070, 0 ,0 ,3.016],
+        "shank_mm": 40,
+        "length"  : 4.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Vis 2 SUP_L298N",
+        "pos_p"   : [0.050, 0.180, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
         "torque_nm":0.15,
@@ -96,7 +117,15 @@ VIS_SUP_L298N = [
     },
     {
         "nom"     : "Vis 3 SUP_L298N",
-        "pos_p"   : [0.110, 0.013, -0.120, 1.442, -0.741, 0.747],
+        "pos_p"   : [0.110, 0.120, -0.0070, 0 ,0 ,3.016],
+        "shank_mm": 40,
+        "length"  : 4.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Vis 4 SUP_L298N",
+        "pos_p"   : [0.110, 0.180, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
         "torque_nm":0.15,
@@ -108,7 +137,7 @@ VIS_BRIDE_MOTEUR = [
 
     {
         "nom"     : "Vis 2 bride 1",
-        "pos_p"   : [-0.0075, -0.0025, -0.122, 1.442, -0.741, 0.747],
+        "pos_p"   : [-0.0075, 0.0580, -0.0010, 0,0,3.016],
         "shank_mm": 35,
         "length"  : 9.0,
         "torque_nm":0.15,
@@ -116,7 +145,7 @@ VIS_BRIDE_MOTEUR = [
     },
     {
         "nom"     : "Vis 2 bride 2",
-        "pos_p"   : [0.1675, -0.0025, -0.122, 1.442, -0.741, 0.747],
+        "pos_p"   : [0.1675, 0.0580, -0.0010, 0, 0, 3.016],
         "shank_mm": 35,
         "length"  : 9.0,
         "torque_nm":0.15,
