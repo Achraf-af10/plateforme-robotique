@@ -68,6 +68,8 @@ EPAISSEUR_SUPPORT  = 0.0115
 MARGE_DETECTION    = 0.04
 NBR_SUPPORT_PICO   = 5
 NBR_SUPPORT_L298N  = 5
+NBR_SUPPORT_1_RASPI = 5
+NBR_SUPPORT_2_RASPI = 5
 
 # Detection de contact
 MARGE_FORCE      = 15.0  # N
@@ -82,7 +84,7 @@ SPEED_SLIDER = 0.9
 # Declaration des supports
 # plan_prise / plan_pose : reperes ou sont exprimes pt_prise / pt_pose
 # pt_prise, pt_pose      : [x, y, z, rx, ry, rz] dans leur repere local
-# ouverture_prise/pose   : ouverture de pince (mm) a la prise / a la pose
+# ouverture_prise/pose/fermeture_prise   : ouverture de pince (mm) a la prise / a la pose
 # etat_file              : fichier JSON de suivi de pile pour ce support
 # nb_support             : nombre initial de pieces dans la pile
 
@@ -99,6 +101,7 @@ SUPPORT_PICO = {
     "plan_pose"      : PLAN_DESSOUS,
     "pt_pose"        : [0.010, 0.150, 0.0047, 0.022,0.022,-0.070],
     "ouverture_prise": 40,
+    "fermeture_prise": 0,
     "ouverture_pose" : 47,
     "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_pico.json"),
     "nb_support"     : NBR_SUPPORT_PICO,
@@ -107,13 +110,40 @@ SUPPORT_PICO = {
 SUPPORT_L298N = {
     "nom"            : "Support L298N",
     "plan_prise"     : PLAN_SUP_L298N,
-    "pt_prise"       : [0.03416, 0.10792, 0.03986, 2.323, -2.170, 0.048],#
+    "pt_prise"       : [0.03416, 0.10792, 0.03986, 2.323, -2.170, 0.048],
     "plan_pose"      : PLAN_DESSOUS,
     "pt_pose"        : [0.080, 0.150, 0.0047, 0.033,-0.002,-0.064],
     "ouverture_prise": 70,
+    "fermeture_prise": 0,
     "ouverture_pose" : 73,
     "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_l298n.json"),
     "nb_support"     : NBR_SUPPORT_L298N,
+}
+
+SUPPORT_SUP1_RASPI = {
+    "nom"            : "Support 1 Raspi",
+    "plan_prise"     : PLAN_SUP1_RASPI,
+    "pt_prise"       : [0.03305, 0.09416, 0.02840, 3.213, 0.116, 0.004],
+    "plan_pose"      : PLAN_DESSUS,
+    "pt_pose"        : [0.130, 0.160, 0.001, 0.041,-0.040,-0.063],
+    "ouverture_prise": 33,
+    "fermeture_prise": 77,
+    "ouverture_pose" : 33,
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_1_raspi.json"),
+    "nb_support"     : NBR_SUPPORT_1_RASPI,
+}
+
+SUPPORT_SUP2_RASPI = {
+    "nom"            : "Support 2 Raspi",
+    "plan_prise"     : PLAN_SUP2_RASPI,
+    "pt_prise"       : [0.03384, 0.09362, 0.01522, 3.193, 0.110, -0.029],
+    "plan_pose"      : PLAN_DESSUS,
+    "pt_pose"        : [0.130, 0.160, -0.006, 0.019,-0.007,-0.063],
+    "ouverture_prise": 59,
+    "fermeture_prise": 0,
+    "ouverture_pose" : 65,
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_2_raspi.json"),
+    "nb_support"     : NBR_SUPPORT_2_RASPI,
 }
 
 
@@ -139,6 +169,7 @@ BRIDE_MOTEUR = {
         [0.15763,0.08900,-0.00975,0.026,-0.0071,-1.658], 
     ],
     "ouverture_prise": 50,
+    "fermeture_prise": 0,
     "ouverture_pose" : 55, 
     "nb_par_cycle"   : 2,
     "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_grille_bride_moteur.json"),
@@ -158,6 +189,7 @@ CARTE_L298N = {
         [0.080,0.150,0.00192,0.023,-0.012,-0.058],
     ],
     "ouverture_prise": 53,
+    "fermeture_prise": 0,
     "ouverture_pose" : 54,
     "nb_par_cycle"   : 1,
     "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_grille_carte_l298n.json"),

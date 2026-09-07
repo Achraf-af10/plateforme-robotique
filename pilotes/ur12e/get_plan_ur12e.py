@@ -18,6 +18,7 @@ PLANS = {
     "Plan_dessous"    : "PLAN_DESSOUS",
     "Plan_dessus"     : "PLAN_DESSUS",
     "Plan_grille_vis" : "PLAN_GRILLE_VIS",
+    "Plan_entretoise" : "PLAN_GRILLE_ENTRETOISE",
 }
 
 

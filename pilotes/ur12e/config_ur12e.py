@@ -21,9 +21,14 @@ PLAN_GRILLE_VIS = [
     0.0008079442261218299, -0.06643225047412703, -3.13094908898571
 ]
 
+PLAN_GRILLE_ENTRETOISE = [
+    -0.8972415661796301, 0.1560410116680353, 0.0600358198893394,
+    0.0013067249844254877, -0.001012514419109025, -3.1283547476391584
+]
+
 # Position de depart du robot
-DEPART_P = [-.468389945276, -.265797410841, .347327833617, 2.808481366023,  1.407848293600,  .000000000020]
-DEPART_Q = [3.9333825026685885, -1.1515688858108355, -2.2034097993905704, -2.927281584613842,  -1.7076195776890835,  4.717135559628818]
+DEPART_P = [-0.3956864294453475, 0.17756706448267412, 0.40527805128328587, -3.1346503212880057, 0.020412230169718736, 0.05712481823912654]
+DEPART_Q = [3.150883197784424, -0.8645792764476319, -2.237497568130493, -3.1444417438902796, -1.5488246122943323, 4.710142612457275]
 
 # Vitesses de mouvement
 SPEED_J      = 0.349066              # rad/s
@@ -65,6 +70,7 @@ DOSSIER_ETATS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "e
 os.makedirs(DOSSIER_ETATS, exist_ok=True)
 
 # Declaration des vis
+#plan : repere ou est exprime pos_p
 # pos_p : [x(m), y(m), z(m), rx(rad), ry(rad), rz(rad)]
 # shank_mm : position de la tige du tournevis en mm
 # length   : longueur de vissage en mm
@@ -74,6 +80,7 @@ os.makedirs(DOSSIER_ETATS, exist_ok=True)
 VIS_SUP_PICO = [
     {
         "nom"     : "Vis 5 SUP_PICO",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.020, 0.120, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
@@ -82,6 +89,7 @@ VIS_SUP_PICO = [
     },
     {
         "nom"     : "Vis 6 SUP_PICO",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.020, 0.180, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
@@ -90,6 +98,7 @@ VIS_SUP_PICO = [
     },
     {
         "nom"     : "Vis 7 SUP_PICO",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.0, 0.180, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
@@ -101,6 +110,7 @@ VIS_SUP_PICO = [
 VIS_SUP_L298N = [
  {
         "nom"     : "Vis 1 SUP_L298N",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.050, 0.120, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
@@ -109,6 +119,7 @@ VIS_SUP_L298N = [
     },
     {
         "nom"     : "Vis 2 SUP_L298N",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.050, 0.180, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
@@ -117,6 +128,7 @@ VIS_SUP_L298N = [
     },
     {
         "nom"     : "Vis 3 SUP_L298N",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.110, 0.120, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
@@ -125,6 +137,7 @@ VIS_SUP_L298N = [
     },
     {
         "nom"     : "Vis 4 SUP_L298N",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.110, 0.180, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
@@ -137,6 +150,7 @@ VIS_BRIDE_MOTEUR = [
 
     {
         "nom"     : "Vis 2 bride 1",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [-0.0075, 0.0580, -0.0010, 0,0,3.016],
         "shank_mm": 35,
         "length"  : 9.0,
@@ -145,9 +159,61 @@ VIS_BRIDE_MOTEUR = [
     },
     {
         "nom"     : "Vis 2 bride 2",
+        "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.1675, 0.0580, -0.0010, 0, 0, 3.016],
         "shank_mm": 35,
         "length"  : 9.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    }
+]
+
+VIS_SUP1_RASPI= [
+ {
+        "nom"     : "Vis 1 SUP1_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.110, 0.140, -0.0080, 0 ,0 ,3.039],
+        "shank_mm": 40,
+        "length"  : 4.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Vis 2 SUP1_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.110, 0.180, -0.0080, 0 ,0 ,3.039],
+        "shank_mm": 40,
+        "length"  : 4.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Vis 3 SUP1_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.150, 0.140, -0.0080, 0 ,0 ,3.039],
+        "shank_mm": 40,
+        "length"  : 4.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Vis 4 SUP1_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.150, 0.180, -0.0080, 0 ,0 ,3.039],
+        "shank_mm": 40,
+        "length"  : 4.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    }
+]
+
+VIS_SUP2_RASPI= [
+ {
+        "nom"     : "Vis 1 SUP2_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.130, 0.125, -0.010, 0 ,0 ,3.151],
+        "shank_mm": 40,
+        "length"  : 2.0,
         "torque_nm":0.15,
         "sleep"   : False,
     }
@@ -171,4 +237,16 @@ GRILLE_VIS_8X8 = {
     "nb_colonnes"  : 8,
     "sauter_centre": False,
     "etat_file"    : os.path.join(DOSSIER_ETATS, "etat_grille_vis_8x8.json"),
+}
+
+GRILLE_ENTRETOISE_8X8 = {
+    "nom"          : "Grille entretoise 8x8",
+    "plan"         : PLAN_GRILLE_VIS,
+    "pt_origine"   : [0.0, 0.0, -0.008, 0.111,-3.138,0.067],#
+    "pas_x"        : 0.010,
+    "pas_y"        : 0.010, 
+    "nb_lignes"    : 8,
+    "nb_colonnes"  : 8,
+    "sauter_centre": False,
+    "etat_file"    : os.path.join(DOSSIER_ETATS, "etat_grille_entretoise_8x8.json"),
 }

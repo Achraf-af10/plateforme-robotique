@@ -27,9 +27,9 @@ from config_ur12e import (
 )
 
 
-def _vers_base(robot, point_platforme):
+def _vers_base(robot, PLAN, point_platforme):
     """Transforme un point du repère plateforme vers le repère base robot."""
-    return robot.pose_trans(PLAN_DESSOUS, point_platforme)
+    return robot.pose_trans(PLAN, point_platforme)
 
 
 def _aller_a(robot, pos_base):
@@ -72,7 +72,7 @@ def _prendre_vis(robot, vis):
 
 
 def _visser_une_vis(robot, vis):
-    pos_vis    = _vers_base(robot, vis["pos_p"])
+    pos_vis    = _vers_base(robot, vis["plan"], vis["pos_p"])
     rx, ry, rz = pos_vis[3], pos_vis[4], pos_vis[5]
     pos_avant  = [pos_vis[0], pos_vis[1], pos_vis[2] + APPROACH_Z, rx, ry, rz]
 
@@ -179,7 +179,7 @@ def _prendre_vis_grille(robot, vis, grille, indice):
 
 def _visser_une_vis_grille(robot, vis, grille, indice):
     """Meme sequence de vissage que _visser_une_vis, mais prise en grille."""
-    pos_vis    = _vers_base(robot, vis["pos_p"])
+    pos_vis    = _vers_base(robot, vis["plan"], vis["pos_p"])
     rx, ry, rz = pos_vis[3], pos_vis[4], pos_vis[5]
     pos_avant  = [pos_vis[0], pos_vis[1], pos_vis[2] + APPROACH_Z, rx, ry, rz]
 

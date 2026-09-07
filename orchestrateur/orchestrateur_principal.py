@@ -1,28 +1,48 @@
+import os
 import json
 import paho.mqtt.client as mqtt
 from machine_etats import OrchestratorCellule
 
 COURTIER = "localhost"
+
+# --- Choix de l'état de départ pour les tests ---
+ETAT_DEPART = os.environ.get("ETAT_DEPART", "idle")
+
 orchestrateur = OrchestratorCellule()
+
+if ETAT_DEPART != "idle":
+    if ETAT_DEPART not in orchestrateur.states:
+        raise ValueError(f"ETAT_DEPART invalide : '{ETAT_DEPART}'. "
+                          f"Valeurs possibles : {orchestrateur.states}")
+    orchestrateur.machine.set_state(ETAT_DEPART)
+    print(f"[TEST] Démarrage forcé à l'état : {ETAT_DEPART}")
 
 CMD_TOPICS = {
     "ur5_vers_a":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_bride"}),
     "ur12e_vers_b": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_bride"}),
-    "ur5_vers_c":  ("cell/robot/ur5/cmd",  {"task": "cycle_pose_sup_pico"}),
-    "ur12e_vers_d":   ("cell/robot/ur12e/cmd",   {"task": "cycle_vissage_sup_pico"}),
-    "ur5_vers_e": ("cell/robot/ur5/cmd", {"task": "cycle_pose_sup_l298N"}),
-    "ur12e_vers_f":  ("cell/robot/ur12e/cmd",  {"task": "cycle_vissage_sup_l298n"}),
-    "ur5_vers_j":  ("cell/robot/ur5/cmd",  {"task": "cycle_pose_carte_l298N"}),
+    "ur5_vers_c":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup_pico"}),
+    "ur12e_vers_d": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_pico"}),
+    "ur5_vers_e":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup_l298N"}),
+    "ur12e_vers_f": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_l298n"}),
+    "ur5_vers_g":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_carte_l298N"}),
+    "ur5_vers_h":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup1_raspi"}),
+    "ur12e_vers_i": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup1_raspi"}),
+    "ur5_vers_j":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup2_raspi"}),
+    "ur12e_vers_k": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup2_raspi"}),
 }
 
 NEXT_TRANSITION = {
     ("ur5", "ur5_vers_a"):     "a_reached",
     ("ur12e", "ur12e_vers_b"): "b_reached",
-    ("ur5", "ur5_vers_c"):   "c_reached",
-    ("ur12e", "ur12e_vers_d"):     "d_reached",
-    ("ur5", "ur5_vers_e"): "e_reached",
-    ("ur12e", "ur12e_vers_f"):   "f_reached",
-    ("ur5", "ur5_vers_j"): "j_reached",
+    ("ur5", "ur5_vers_c"):     "c_reached",
+    ("ur12e", "ur12e_vers_d"): "d_reached",
+    ("ur5", "ur5_vers_e"):     "e_reached",
+    ("ur12e", "ur12e_vers_f"): "f_reached",
+    ("ur5", "ur5_vers_g"):     "j_reached",
+    ("ur5", "ur5_vers_h"):     "i_reached",
+    ("ur12e", "ur12e_vers_i"): "g_reached",
+    ("ur5", "ur5_vers_j"):     "h_reached",
+    ("ur12e", "ur12e_vers_k"): "k_reached",
 }
 
 def nettoyer_messages_retenus(client):
@@ -42,8 +62,11 @@ def publish_current_task(client):
 def on_connect(client, userdata, flags, rc):
     print("Connecté au broker, code:", rc)
     client.subscribe("cell/robot/+/status")
-    nettoyer_messages_retenus(client) 
-    orchestrateur.start()
+    nettoyer_messages_retenus(client)
+
+    if ETAT_DEPART == "idle":
+        orchestrateur.start()
+
     publish_current_task(client)
 
 def on_message(client, userdata, msg):
@@ -65,4 +88,3 @@ client.on_connect = on_connect
 client.on_message = on_message
 client.connect(COURTIER, 1883, 60)
 client.loop_forever()
-

@@ -1,5 +1,4 @@
 from rtde_receive import RTDEReceiveInterface
-import jkrc
 
 # --- UR5 ---
 try:
@@ -17,12 +16,3 @@ try:
     ur12e.disconnect()
 except:
     print("[UR12e] Erreur de connexion")
-
-print("#######################")
-# --- JAKA ---
-jaka = jkrc.RC("10.120.0.13")
-if jaka.login()[0] == 0:
-    print(f"[JAKA]  Joints: {jaka.get_joint_position()[1]}\n[JAKA]  TCP:    {jaka.get_tcp_position()[1]}")
-    jaka.logout()
-else:
-    print("[JAKA]  Erreur de connexion")

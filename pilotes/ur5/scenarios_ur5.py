@@ -21,7 +21,7 @@ from config_ur5 import (
     SPEED_L_RETRAIT, ACC_L_RETRAIT,
     EPAISSEUR_SUPPORT, MARGE_DETECTION,
     MARGE_FORCE, TIMEOUT_CONTACT,
-    PINCE_FORCE, PINCE_SPEED,SPEED_SLIDER
+    PINCE_FORCE, PINCE_SPEED
 )
 
 
@@ -122,6 +122,7 @@ def _prendre_et_poser_une_piece(robot, support):
     plan_prise      = support["plan_prise"]
     plan_pose       = support["plan_pose"]
     ouverture_prise = support["ouverture_prise"]
+    fermeture_prise = support["fermeture_prise"]
     ouverture_pose  = support["ouverture_pose"]
     label           = support["nom"]
 
@@ -139,16 +140,17 @@ def _prendre_et_poser_une_piece(robot, support):
 
     # Prise
     robot.moveJ(DEPART_Q, SPEED_J, ACC_J)
-    pince_open(width=ouverture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
 
     q = robot.get_inverse_kinematics(pt_approche, qnear=robot.get_actual_q())
     robot.moveJ(q, SPEED_J, ACC_J)
+    pince_open(width=ouverture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
+
 
     v, d = _direction_descente(pt_approche, pt_prise)
     if not move_until_contact(robot, v, d):
         raise RuntimeError(f"Echec contact {label}")
 
-    pince_close(width=0.0, force=PINCE_FORCE, speed=PINCE_SPEED)
+    pince_close(width=fermeture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
 
     q = robot.get_inverse_kinematics(pt_approche, qnear=robot.get_actual_q())
     robot.moveJ(q, SPEED_J, ACC_J)
@@ -201,6 +203,7 @@ def _prendre_et_poser_piece_grille(robot, grille, indice):
     plan_prise      = grille["plan_prise"]
     plan_pose        = grille["plan_pose"]
     ouverture_prise  = grille["ouverture_prise"]
+    fermeture_prise   = grille["fermeture_prise"]
     ouverture_pose   = grille["ouverture_pose"]
     label            = grille["nom"]
 
@@ -217,13 +220,14 @@ def _prendre_et_poser_piece_grille(robot, grille, indice):
 
     # Prise (descente directe, pas de detection de contact)
     robot.moveJ(DEPART_Q, SPEED_J, ACC_J)
-    pince_open(width=ouverture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
 
     q = robot.get_inverse_kinematics(pt_approche, qnear=robot.get_actual_q())
     robot.moveJ(q, SPEED_J, ACC_J)
+    pince_open(width=ouverture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
+
     robot.moveL(pt_prise, SPEED_L_SLOW, ACC_L_SLOW)
 
-    pince_close(width=0.0, force=PINCE_FORCE, speed=PINCE_SPEED)
+    pince_close(width=fermeture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
 
     robot.moveL(pt_approche, SPEED_L_RETRAIT, ACC_L_RETRAIT)
 

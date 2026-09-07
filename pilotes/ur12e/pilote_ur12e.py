@@ -21,6 +21,8 @@ TASKS = {
     "cycle_vissage_bride": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_BRIDE_MOTEUR, grille=config_ur12e.GRILLE_VIS_8X8),
     "cycle_vissage_sup_pico": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP_PICO),
     "cycle_vissage_sup_l298n": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP_L298N),
+    "cycle_vissage_sup1_raspi": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP1_RASPI),
+    "cycle_vissage_sup2_raspi": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP2_RASPI),
 }
 
 def handle_task(data):
