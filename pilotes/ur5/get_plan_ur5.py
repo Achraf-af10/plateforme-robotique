@@ -23,6 +23,8 @@ PLANS = {
     "Plan_sup_pico"      : "PLAN_SUP_PICO",
     "Plan_dessous"     : "PLAN_DESSOUS",
     "Plan_dessus"      : "PLAN_DESSUS",
+    "Plan_sup_pwrbnk"      : "PLAN_SUP_POWERBANK",
+    "Plan_raspi4"      : "PLAN_RASPI4",
 }
 
 

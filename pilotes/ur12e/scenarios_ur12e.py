@@ -26,11 +26,9 @@ from config_ur12e import (
     CAPTEUR_PRES_VIS_PIN,
 )
 
-
 def _vers_base(robot, PLAN, point_platforme):
     """Transforme un point du repère plateforme vers le repère base robot."""
     return robot.pose_trans(PLAN, point_platforme)
-
 
 def _aller_a(robot, pos_base):
     """MoveJ vers un point cartésien — IK depuis la position courante."""
@@ -141,6 +139,7 @@ def _prendre_vis_grille(robot, vis, grille, indice):
     Prend la vis d'indice `indice` dans la grille. Position deja connue
     (vis visible/disposee) : pas d'attente de capteur, descente directe.
     """
+    
     positions = positions_grille(grille)
     if indice >= len(positions):
         raise RuntimeError(f"Grille epuisee ({grille['nom']})")
@@ -153,7 +152,7 @@ def _prendre_vis_grille(robot, vis, grille, indice):
     # Approche au-dessus de la vis dans la grille
     q = robot.get_inverse_kinematics(pos_avant, qnear=robot.get_actual_q())
     robot.moveJ(q, SPEED_J, ACC_J)
-    move_shank(z_pos_mm=30, tool_index=0) #########
+    move_shank(z_pos_mm=grille["shank_mm"], tool_index=0) 
 
     # Descente directe sur la vis
     robot.moveL(pos_vis, SPEED_L_SLOW, ACC_L_SLOW)
@@ -161,7 +160,7 @@ def _prendre_vis_grille(robot, vis, grille, indice):
     # Prise de la vis
     retval = pick_screw(
         z_force_n=Z_FORCE_N,
-        screw_length_mm=15.0, #########
+        screw_length_mm=grille["scew_length"],
         tool_index=0,
     )
 

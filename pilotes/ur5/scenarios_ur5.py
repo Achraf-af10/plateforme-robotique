@@ -18,8 +18,9 @@ from config_ur5 import (
     DEPART_Q,
     SPEED_J, ACC_J,
     SPEED_L_SLOW, ACC_L_SLOW,
+    SPEED_L_RAPIDE, ACC_L_RAPIDE,
     SPEED_L_RETRAIT, ACC_L_RETRAIT,
-    EPAISSEUR_SUPPORT, MARGE_DETECTION,
+    EPAISSEUR_SUPPORT, MARGE_DETECTION, MARGE_INTER,
     MARGE_FORCE, TIMEOUT_CONTACT,
     PINCE_FORCE, PINCE_SPEED
 )
@@ -111,10 +112,6 @@ def move_until_contact(robot, v, d, marge_force=MARGE_FORCE, timeout=TIMEOUT_CON
 
 # Scenario generique prise + pose (une seule piece)
 def _prendre_et_poser_une_piece(robot, support):
-    """
-    Sequence generique : aller chercher un support et le poser sur la plateforme.
-    Fonctionne pour tous les types de supports — seuls les plans/points du dict changent.
-    """
     index, _ = _index_courant(support)
     if index < 0:
         raise RuntimeError(f"Pile vide ! ({support['nom']})")
@@ -126,12 +123,13 @@ def _prendre_et_poser_une_piece(robot, support):
     ouverture_pose  = support["ouverture_pose"]
     label           = support["nom"]
 
-    # Adapter la hauteur de prise selon l'index dans la pile
     delta_z         = index * EPAISSEUR_SUPPORT
     pos_prise       = _pos_avant(support["pt_prise"], delta_z)
     pos_prise_avant = _pos_avant(pos_prise, MARGE_DETECTION)
+    pos_prise_inter = _pos_avant(pos_prise, MARGE_INTER)
 
     pt_approche = robot.pose_trans(plan_prise, pos_prise_avant)
+    pt_inter    = robot.pose_trans(plan_prise, pos_prise_inter)
     pt_prise    = robot.pose_trans(plan_prise, pos_prise)
 
     pos_pose_avant = _pos_avant(support["pt_pose"], -(MARGE_DETECTION + 0.05))
@@ -145,8 +143,11 @@ def _prendre_et_poser_une_piece(robot, support):
     robot.moveJ(q, SPEED_J, ACC_J)
     pince_open(width=ouverture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
 
+    # Segment 1 : approche -> inter (rapide)
+    robot.moveL(pt_inter, SPEED_L_RAPIDE, ACC_L_RAPIDE)
 
-    v, d = _direction_descente(pt_approche, pt_prise)
+    # Segment 2 : inter -> prise (lent, avec detection de contact)
+    v, d = _direction_descente(pt_inter, pt_prise)
     if not move_until_contact(robot, v, d):
         raise RuntimeError(f"Echec contact {label}")
 
@@ -167,7 +168,6 @@ def _prendre_et_poser_une_piece(robot, support):
 
     _consommer_support(support)
     print(f"[scenarios] {label} index={index} pose avec succes")
-
 
 def cycle_pose(robot, support_list):
     """Scenario principal : pose successive de plusieurs pieces (memes ou types differents)."""
@@ -201,30 +201,36 @@ def _prendre_et_poser_piece_grille(robot, grille, indice):
         raise RuntimeError(f"pts_pose insuffisant pour l'indice {indice} ({grille['nom']})")
 
     plan_prise      = grille["plan_prise"]
-    plan_pose        = grille["plan_pose"]
-    ouverture_prise  = grille["ouverture_prise"]
-    fermeture_prise   = grille["fermeture_prise"]
-    ouverture_pose   = grille["ouverture_pose"]
-    label            = grille["nom"]
+    plan_pose       = grille["plan_pose"]
+    ouverture_prise = grille["ouverture_prise"]
+    fermeture_prise = grille["fermeture_prise"]
+    ouverture_pose  = grille["ouverture_pose"]
+    label           = grille["nom"]
 
     pt_prise_local = positions[indice]
     pt_pose_local  = pts_pose[indice]
 
     pos_prise_avant = _pos_avant(pt_prise_local, MARGE_DETECTION)
+    pos_prise_inter = _pos_avant(pt_prise_local, MARGE_INTER)
     pt_approche     = robot.pose_trans(plan_prise, pos_prise_avant)
+    pt_inter        = robot.pose_trans(plan_prise, pos_prise_inter)
     pt_prise        = robot.pose_trans(plan_prise, pt_prise_local)
 
     pos_pose_avant = _pos_avant(pt_pose_local, -(MARGE_DETECTION + 0.05))
     pt_pose        = robot.pose_trans(plan_pose, pt_pose_local)
     pt_pose_app    = robot.pose_trans(plan_pose, pos_pose_avant)
 
-    # Prise (descente directe, pas de detection de contact)
+    # Prise
     robot.moveJ(DEPART_Q, SPEED_J, ACC_J)
 
     q = robot.get_inverse_kinematics(pt_approche, qnear=robot.get_actual_q())
     robot.moveJ(q, SPEED_J, ACC_J)
     pince_open(width=ouverture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
 
+    # Segment 1 : approche -> inter (rapide)
+    robot.moveL(pt_inter, SPEED_L_RAPIDE, ACC_L_RAPIDE)
+
+    # Segment 2 : inter -> prise (lent)
     robot.moveL(pt_prise, SPEED_L_SLOW, ACC_L_SLOW)
 
     pince_close(width=fermeture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)

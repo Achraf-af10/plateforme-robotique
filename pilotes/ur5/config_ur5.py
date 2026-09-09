@@ -49,6 +49,16 @@ PLAN_DESSUS = [
     -2.220029598242967, 2.221592380709402, -0.02597228620567457
 ]
 
+PLAN_SUP_POWERBANK = [
+    0.5514372245348925, -0.26646787136559186, 0.0542527492397433,
+    -0.005961115416691898, 0.01769347385032139, 0.002110721612619694
+] 
+
+PLAN_RASPI4 = [
+    0.6902320296656295, -0.11956113570840263, 0.05131808148261274,
+    -0.004514018244157369, 0.017019741012314994, -0.0030428364174377876
+]
+
 # Position de depart
 DEPART_Q = [
     2.3968450477696024e-05, -1.570796314870016, -1.57074481645693,
@@ -62,14 +72,19 @@ SPEED_L_SLOW  = 0.02
 ACC_L_SLOW    = 0.04
 SPEED_L_RETRAIT = 0.15
 ACC_L_RETRAIT   = 0.15
+SPEED_L_RAPIDE = 0.25 #
+ACC_L_RAPIDE   = 0.5
 
 # Geometrie & Piles
 EPAISSEUR_SUPPORT  = 0.0115
-MARGE_DETECTION    = 0.04
+MARGE_DETECTION    = 0.1
+MARGE_INTER = MARGE_DETECTION * 0.4 #
+
 NBR_SUPPORT_PICO   = 5
 NBR_SUPPORT_L298N  = 5
 NBR_SUPPORT_1_RASPI = 5
 NBR_SUPPORT_2_RASPI = 5
+NBR_SUPPORT_POWERBANK = 5
 
 # Detection de contact
 MARGE_FORCE      = 15.0  # N
@@ -144,6 +159,19 @@ SUPPORT_SUP2_RASPI = {
     "ouverture_pose" : 65,
     "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_2_raspi.json"),
     "nb_support"     : NBR_SUPPORT_2_RASPI,
+}
+
+SUPPORT_SUP_POWERBANK = {
+    "nom"            : "Support Powerbank",
+    "plan_prise"     : PLAN_SUP_POWERBANK,
+    "pt_prise"       : [-0.06190, 0.08625, 0.04010, 0.101, -3.161, 0.073],
+    "plan_pose"      : PLAN_DESSUS,
+    "pt_pose"        : [0.03610, 0.08445, 0.005, 0.011, -0.101, -3.194],
+    "ouverture_prise": 33,
+    "fermeture_prise": 77,
+    "ouverture_pose" : 33,
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_powerbank.json"),
+    "nb_support"     : NBR_SUPPORT_POWERBANK,
 }
 
 

@@ -61,7 +61,7 @@ CAPTEUR_PRES_VIS_PIN = 0  # entrée digitale
 
 
 # Vitesse globale du robot (0.0 a 1.0)
-SPEED_SLIDER = 0.6
+SPEED_SLIDER = 0.7
 
 import os
 
@@ -219,6 +219,137 @@ VIS_SUP2_RASPI= [
     }
 ]
 
+VIS_ENTRETOISE_SUP_PICO = [
+ {
+        "nom"     : "Entretoise 1 SUP_PICO",
+        "plan"    : PLAN_DESSOUS,
+        "pos_p"   : [0.020, 0.120, 0.001, 0.033, 0.028, -4.025],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Entretoise 2 SUP_PICO",
+        "plan"    : PLAN_DESSOUS,
+        "pos_p"   : [0.020, 0.180, 0.001, 0.033, 0.028, -4.025],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Entretoise 3 SUP_PICO",
+        "plan"    : PLAN_DESSOUS,
+        "pos_p"   : [0.0, 0.180, 0.001, 0.033, 0.028, -4.025],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    }
+]
+
+VIS_ENTRETOISE_SUP_L298N = [
+ {
+        "nom"     : "Entretoise 1 SUP_L298N",
+        "plan"    : PLAN_DESSOUS,
+        "pos_p"   : [0.050, 0.120, 0.001, 0.033, 0.028, -4.025],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Entretoise 2 SUP_L298N",
+        "plan"    : PLAN_DESSOUS,
+        "pos_p"   : [0.050, 0.180, 0.001, 0.033, 0.028, -4.025],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Entretoise 3 SUP_L298N",
+        "plan"    : PLAN_DESSOUS,
+        "pos_p"   : [0.110, 0.120, 0.001, 0.033, 0.028, -4.025],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Entretoise 4 SUP_L298N",
+        "plan"    : PLAN_DESSOUS,
+        "pos_p"   : [0.110, 0.180, 0.001, 0.033, 0.028, -4.025],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    }
+]
+
+VIS_ENTRETOISE_SUP1_RASPI= [
+ {
+        "nom"     : "Entretoise 1 SUP_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.110, 0.140, -0.0020, 0.064, -0.004, -3.488],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Entretoise 2 SUP_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.110, 0.180, -0.0020, 0.064, -0.004, -3.488],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Entretoise 3 SUP_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.150, 0.140, -0.0020, 0.064, -0.004, -3.488],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Entretoise 4 SUP_RASPI",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.150, 0.180, -0.0020, 0.064, -0.004, -3.488],
+        "shank_mm": 20,
+        "length"  : 7.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    }
+]
+
+
+VIS_SUP_POWERBANK = [
+
+    {
+        "nom"     : "Vis 1 sup_powerbank",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.060, 0.140, 0.001, 0.055, -0.014, -3.132],
+        "shank_mm": 30,
+        "length"  : 10.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    },
+    {
+        "nom"     : "Vis 2 sup_powerbank",
+        "plan"    : PLAN_DESSUS,
+        "pos_p"   : [0.020, 0.140, 0.001, 0.055, -0.014, -3.132],
+        "shank_mm": 30,
+        "length"  : 10.0,
+        "torque_nm":0.2,
+        "sleep"   : False,
+    }
+]
+
 
 # Grille de vis : positions, dimensions et centre a ignorer
 # pt_origine : position de la premiere vis
@@ -230,7 +361,9 @@ VIS_SUP2_RASPI= [
 GRILLE_VIS_8X8 = {
     "nom"          : "Grille vis 8x8",
     "plan"         : PLAN_GRILLE_VIS,
-    "pt_origine"   : [0.0, 0.0, -0.008, 0.111,-3.138,0.067], 
+    "pt_origine"   : [0.0, 0.0, -0.008, 0.111,-3.138,0.067],
+    "shank_mm"     : 30,
+    "scew_length"  : 15.0,
     "pas_x"        : 0.010, 
     "pas_y"        : 0.010, 
     "nb_lignes"    : 8,
@@ -241,8 +374,10 @@ GRILLE_VIS_8X8 = {
 
 GRILLE_ENTRETOISE_8X8 = {
     "nom"          : "Grille entretoise 8x8",
-    "plan"         : PLAN_GRILLE_VIS,
-    "pt_origine"   : [0.0, 0.0, -0.008, 0.111,-3.138,0.067],#
+    "plan"         : PLAN_GRILLE_ENTRETOISE,
+    "pt_origine"   : [0.0, 0.0, -0.001, 0.516, -3.100, 0.001],
+    "shank_mm"     : 10,
+    "scew_length"  : 3.0,
     "pas_x"        : 0.010,
     "pas_y"        : 0.010, 
     "nb_lignes"    : 8,

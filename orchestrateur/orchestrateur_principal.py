@@ -5,8 +5,8 @@ from machine_etats import OrchestratorCellule
 
 COURTIER = "localhost"
 
-# --- Choix de l'état de départ pour les tests ---
 ETAT_DEPART = os.environ.get("ETAT_DEPART", "idle")
+MODE_PAS_A_PAS = os.environ.get("PAS_A_PAS", "0") == "1"
 
 orchestrateur = OrchestratorCellule()
 
@@ -18,41 +18,63 @@ if ETAT_DEPART != "idle":
     print(f"[TEST] Démarrage forcé à l'état : {ETAT_DEPART}")
 
 CMD_TOPICS = {
-    "ur5_vers_a":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_bride"}),
-    "ur12e_vers_b": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_bride"}),
-    "ur5_vers_c":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup_pico"}),
-    "ur12e_vers_d": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_pico"}),
-    "ur5_vers_e":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup_l298N"}),
-    "ur12e_vers_f": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_l298n"}),
-    "ur5_vers_g":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_carte_l298N"}),
-    "ur5_vers_h":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup1_raspi"}),
-    "ur12e_vers_i": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup1_raspi"}),
-    "ur5_vers_j":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup2_raspi"}),
-    "ur12e_vers_k": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup2_raspi"}),
+    "ur12e_vers_a": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_entretoises_pico"}),
+    "ur12e_vers_b": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_entretoises_l298n"}),
+    "ur5_vers_1":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_bride"}),
+    "ur12e_vers_2": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_bride"}),
+    "ur5_vers_3":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup_pico"}),
+    "ur12e_vers_4": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_pico"}),
+    "ur5_vers_5":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup_l298N"}),
+    "ur12e_vers_6": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_l298n"}),
+    "ur5_vers_7":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_carte_l298N"}),
+    "ur12e_vers_8": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_entretoises_raspi"}),
+    "ur5_vers_9":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup1_raspi"}),
+    "ur12e_vers_10": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup1_raspi"}),
+    "ur5_vers_11":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup2_raspi"}),
+    "ur12e_vers_12": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup2_raspi"}),
+    "ur5_vers_13":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup_powerbank"}),
+    "ur12e_vers_14": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_powerbank"}),
 }
 
 NEXT_TRANSITION = {
-    ("ur5", "ur5_vers_a"):     "a_reached",
+    ("ur12e", "ur12e_vers_a"): "a_reached",
     ("ur12e", "ur12e_vers_b"): "b_reached",
-    ("ur5", "ur5_vers_c"):     "c_reached",
-    ("ur12e", "ur12e_vers_d"): "d_reached",
-    ("ur5", "ur5_vers_e"):     "e_reached",
-    ("ur12e", "ur12e_vers_f"): "f_reached",
-    ("ur5", "ur5_vers_g"):     "j_reached",
-    ("ur5", "ur5_vers_h"):     "i_reached",
-    ("ur12e", "ur12e_vers_i"): "g_reached",
-    ("ur5", "ur5_vers_j"):     "h_reached",
-    ("ur12e", "ur12e_vers_k"): "k_reached",
+    ("ur5", "ur5_vers_1"):     "1_reached",
+    ("ur12e", "ur12e_vers_2"): "2_reached",
+    ("ur5", "ur5_vers_3"):     "3_reached",
+    ("ur12e", "ur12e_vers_4"): "4_reached",
+    ("ur5", "ur5_vers_5"):     "5_reached",
+    ("ur12e", "ur12e_vers_6"): "6_reached",
+    ("ur5", "ur5_vers_7"):     "7_reached",
+    ("ur12e", "ur12e_vers_8"): "8_reached",
+    ("ur5", "ur5_vers_9"):     "9_reached",
+    ("ur12e", "ur12e_vers_10"): "10_reached",
+    ("ur5", "ur5_vers_11"):     "11_reached",
+    ("ur12e", "ur12e_vers_12"): "12_reached",
+    ("ur5", "ur5_vers_13"):     "13_reached",
+    ("ur12e", "ur12e_vers_14"): "14_reached",
+}
+
+# definir les états pour lesquels on souhaite une pause avant d'envoyer la commande suivante
+ETATS_AVEC_PAUSE = {
+    "ur5_vers_1",
+    "ur5_vers_9",
+    "ur12e_vers_8"
 }
 
 def nettoyer_messages_retenus(client):
-    """Efface tous les messages retenus en publiant des messages vides."""
     for state, (topic, _) in CMD_TOPICS.items():
         client.publish(topic, "", retain=True)
     print("[INIT] Messages retenus effacés")
 
+def attendre_confirmation():
+    print(f"\n[PAUSE] Prochaine étape : {orchestrateur.state}")
+    input("        Appuie sur Entrée pour continuer...")
+
 def publish_current_task(client):
     if orchestrateur.state in CMD_TOPICS:
+        if MODE_PAS_A_PAS and orchestrateur.state in ETATS_AVEC_PAUSE:
+            attendre_confirmation()
         topic, payload = CMD_TOPICS[orchestrateur.state]
         client.publish(topic, json.dumps(payload), retain=False)
         print(f"-> {topic}: {payload}")
