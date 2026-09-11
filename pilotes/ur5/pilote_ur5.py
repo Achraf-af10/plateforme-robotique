@@ -17,6 +17,19 @@ import config_ur5
 robot = UR5(ip="10.120.0.11")
 
 # Définir les tâches disponibles
+
+"""
+TASKS = {
+    "cycle_pose_bride": lambda data: cycle_pose_grille(robot, grille=config_ur5.BRIDE_MOTEUR), # pour les piece qu'ils sont dans une grille
+    "cycle_pose_sup_pico": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_PICO]), # pour les piece qu'ils sont dans un bac
+    "cycle_pose_sup_l298N": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_L298N]),
+    "cycle_pose_sup1_raspi": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_SUP1_RASPI]),
+    "cycle_pose_sup2_raspi": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_SUP2_RASPI]),
+    "cycle_pose_sup_powerbank": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_SUP_POWERBANK]),
+
+}
+"""
+# les fonctions lambda sont definit dans fichier scenarios_ur5.py
 TASKS = {
     "cycle_pose_bride": lambda data: cycle_pose_grille(robot, grille=config_ur5.BRIDE_MOTEUR),
     "cycle_pose_sup_pico": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_PICO]),
@@ -24,8 +37,9 @@ TASKS = {
     "cycle_pose_sup1_raspi": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_SUP1_RASPI]),
     "cycle_pose_sup2_raspi": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_SUP2_RASPI]),
     "cycle_pose_sup_powerbank": lambda data: cycle_pose(robot, support_list=[config_ur5.SUPPORT_SUP_POWERBANK]),
-
 }
+
+
 
 def handle_task(data):
     """Callback MQTT : exécuter la tâche demandée."""

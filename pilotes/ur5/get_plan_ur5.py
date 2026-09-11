@@ -26,7 +26,7 @@ PLANS = {
     "Plan_sup_pwrbnk"      : "PLAN_SUP_POWERBANK",
     "Plan_raspi4"      : "PLAN_RASPI4",
 }
-# cree plan gabarit "gabarit" : "PLAN_GABARIT"
+# cree plan gabarit "gabarit" : "PLAN_GABARIT",
 
 
 def recuperer_script():

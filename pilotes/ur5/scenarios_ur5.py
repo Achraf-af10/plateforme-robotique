@@ -109,8 +109,10 @@ def move_until_contact(robot, v, d, marge_force=MARGE_FORCE, timeout=TIMEOUT_CON
     print("  [contact] TIMEOUT")
     return False
 
+#############################################################################################################################
+# Scenario generique prise + pose (une seule piece) des pieces dans un bac
+#############################################################################################################################
 
-# Scenario generique prise + pose (une seule piece)
 def _prendre_et_poser_une_piece(robot, support):
     index, _ = _index_courant(support)
     if index < 0:
@@ -136,39 +138,47 @@ def _prendre_et_poser_une_piece(robot, support):
     pt_pose        = robot.pose_trans(plan_pose, support["pt_pose"])
     pt_pose_app    = robot.pose_trans(plan_pose, pos_pose_avant)
 
-    # Prise
-    robot.moveJ(DEPART_Q, SPEED_J, ACC_J)
+    #######################################################################
+    # Prise dans le bac
+    #######################################################################
 
-    q = robot.get_inverse_kinematics(pt_approche, qnear=robot.get_actual_q())
-    robot.moveJ(q, SPEED_J, ACC_J)
-    pince_open(width=ouverture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
+    robot.moveJ(DEPART_Q, SPEED_J, ACC_J) # aller au point de depart
+
+    q = robot.get_inverse_kinematics(pt_approche, qnear=robot.get_actual_q()) # point actiqulaire
+    robot.moveJ(q, SPEED_J, ACC_J) # aller au point d'approche
+    pince_open(width=ouverture_prise, force=PINCE_FORCE, speed=PINCE_SPEED) # ouvre la pince
 
     # Segment 1 : approche -> inter (rapide)
-    robot.moveL(pt_inter, SPEED_L_RAPIDE, ACC_L_RAPIDE)
+    robot.moveL(pt_inter, SPEED_L_RAPIDE, ACC_L_RAPIDE) # aller au point intermedaire
 
     # Segment 2 : inter -> prise (lent, avec detection de contact)
-    v, d = _direction_descente(pt_inter, pt_prise)
+    v, d = _direction_descente(pt_inter, pt_prise) # avancer jusqua detecter un contact
     if not move_until_contact(robot, v, d):
         raise RuntimeError(f"Echec contact {label}")
 
     pince_close(width=fermeture_prise, force=PINCE_FORCE, speed=PINCE_SPEED)
 
-    q = robot.get_inverse_kinematics(pt_approche, qnear=robot.get_actual_q())
-    robot.moveJ(q, SPEED_J, ACC_J)
+    robot.moveL(pt_approche, SPEED_L_RETRAIT, ACC_L_RETRAIT)
 
-    # Pose
+    #######################################################################
+    # Pose dans la plateforme
+    #######################################################################
+
     q = robot.get_inverse_kinematics(pt_pose_app, qnear=robot.get_actual_q())
-    robot.moveJ(q, SPEED_J, ACC_J)
-    robot.moveL(pt_pose, SPEED_L_SLOW, ACC_L_SLOW)
+    robot.moveJ(q, SPEED_J, ACC_J) # aller au point dapproche du point de pose
+    robot.moveL(pt_pose, SPEED_L_SLOW, ACC_L_SLOW) # descend au point de pose
 
-    pince_open(width=ouverture_pose, force=PINCE_FORCE, speed=PINCE_SPEED)
+    pince_open(width=ouverture_pose, force=PINCE_FORCE, speed=PINCE_SPEED) # ouvre la pince pour lacher
 
-    robot.moveL(pt_pose_app, SPEED_L_RETRAIT, ACC_L_RETRAIT)
-    robot.moveJ(DEPART_Q, SPEED_J, ACC_J)
+    robot.moveL(pt_pose_app, SPEED_L_RETRAIT, ACC_L_RETRAIT) # aller au point dapproche
+    robot.moveJ(DEPART_Q, SPEED_J, ACC_J) # aller au point de depart
 
-    _consommer_support(support)
+    _consommer_support(support) # mise a jour des nombre de piece dans le bac
     print(f"[scenarios] {label} index={index} pose avec succes")
 
+#######################################################################
+# cycle des pieces dans un bac
+#######################################################################
 def cycle_pose(robot, support_list):
     """Scenario principal : pose successive de plusieurs pieces (memes ou types differents)."""
     print("=== Debut cycle de pose ===")
@@ -184,8 +194,10 @@ def cycle_pose(robot, support_list):
     print("\n=== Cycle termine — toutes les pieces posees ===")
     return True
 
+#############################################################################################################################
+# Pieces organisees en grille (pas de pile, positions calculees par pas x/y) les pieces dans une grille/matrice
+#############################################################################################################################
 
-# Pieces organisees en grille (pas de pile, positions calculees par pas x/y)
 def _prendre_et_poser_piece_grille(robot, grille, indice):
     """
     Prend la piece d'indice `indice` dans la grille et la pose au point
@@ -220,7 +232,9 @@ def _prendre_et_poser_piece_grille(robot, grille, indice):
     pt_pose        = robot.pose_trans(plan_pose, pt_pose_local)
     pt_pose_app    = robot.pose_trans(plan_pose, pos_pose_avant)
 
-    # Prise
+    #######################################################################
+    # Prise dans les grilles
+    #######################################################################
     robot.moveJ(DEPART_Q, SPEED_J, ACC_J)
 
     q = robot.get_inverse_kinematics(pt_approche, qnear=robot.get_actual_q())
@@ -237,7 +251,9 @@ def _prendre_et_poser_piece_grille(robot, grille, indice):
 
     robot.moveL(pt_approche, SPEED_L_RETRAIT, ACC_L_RETRAIT)
 
-    # Pose
+    #######################################################################
+    # pose sur la plateforme
+    #######################################################################
     q = robot.get_inverse_kinematics(pt_pose_app, qnear=robot.get_actual_q())
     robot.moveJ(q, SPEED_J, ACC_J)
     robot.moveL(pt_pose, SPEED_L_SLOW, ACC_L_SLOW)
@@ -250,7 +266,9 @@ def _prendre_et_poser_piece_grille(robot, grille, indice):
     consommer_element_grille(grille)
     print(f"[scenarios] {label} indice={indice} pose avec succes")
 
-
+#######################################################################
+# cycle des pieces dans une grilles
+#######################################################################
 def cycle_pose_grille(robot, grille):
     """
     Scenario principal grille : prend et pose grille['nb_par_cycle'] pieces

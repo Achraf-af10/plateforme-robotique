@@ -1,5 +1,7 @@
 from rtde_receive import RTDEReceiveInterface
 
+# fonction test pour recuperer la position des robots UR5 et UR12e
+
 # --- UR5 ---
 try:
     ur5 = RTDEReceiveInterface("10.120.0.11")

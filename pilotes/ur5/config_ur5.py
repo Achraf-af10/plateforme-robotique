@@ -48,14 +48,14 @@ PLAN_SUP_PICO = [
 
 # repere plateforme de travail (dessous)
 PLAN_DESSOUS = [
-    0.2112721411868312, 0.6959759490037689, 0.1413041916305522,
-    -2.202032924142858, 2.236323032983556, 0.000479078094893015
+    0.21136288185795937, 0.7195272156546326, 0.14136029868392827,
+    -2.1993497985184676, 2.2338882591404023, 0.004843240400947487
 ]
 
 # repere plateforme de travail (dessus)
 PLAN_DESSUS = [
-    -0.07738892688247738, 0.6995597621960921, 0.13452491514305923,
-    -2.220029598242967, 2.221592380709402, -0.02597228620567457
+    -0.07655154440844751, 0.723245801154086, 0.14100708746650834,
+    -2.2100468075173305, 2.2310031209317103, 0.01664811514468511
 ]
 
 # repere support/bac powerbank
@@ -88,6 +88,20 @@ SPEED_L_RETRAIT = 0.15
 ACC_L_RETRAIT   = 0.15
 SPEED_L_RAPIDE = 0.25 
 ACC_L_RAPIDE   = 0.5
+
+"""
+# Vitesses de mouvement
+SPEED_J_AVANT     = 0.5 
+SPEED_J_APRES     = 0.5 
+ACC_J_AVANT       = 0.8
+ACC_J_APRES     = 0.8
+SPEED_L_SLOW  = 0.02
+ACC_L_SLOW    = 0.04
+SPEED_L_RETRAIT = 0.15 # VITESSE LINEARE DE RETRAIT APRES AVOIR POSE LA PIECE
+ACC_L_RETRAIT   = 0.15 
+SPEED_L_RAPIDE = 0.25 # vitesse entre point d'approche et point de prise
+ACC_L_RAPIDE   = 0.5
+"""
 
 # Geometrie & Piles
 EPAISSEUR_SUPPORT  = 0.0115
@@ -123,6 +137,21 @@ import os
 DOSSIER_ETATS = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "etats_json"))
 os.makedirs(DOSSIER_ETATS, exist_ok=True)
 
+"""
+SUPPORT_PICO = {
+    "nom"            : "Support Pico",
+    "plan_prise"     : PLAN_SUP_PICO,  #repere du support pico
+    "pt_prise"       : [0.03451, 0.06421, 0.03822, 2.317, -2.154, 0.047], # point de prise du support pico dans le repere du support
+    "plan_pose"      : PLAN_DESSOUS, # repere du surface en dessous de la plateforme plaque
+    "pt_pose"        : [0.010, 0.150, 0.0047, 0.022,0.022,-0.070], # point de pose du support dans le repere de la plateforme
+    "ouverture_prise": 40, # ouverture de la pince pour la prise
+    "fermeture_prise": 0, # fermeture de la pince
+    "ouverture_pose" : 47, # ouverture de la pince pour lacher la piece
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_pico.json"),
+    "nb_support"     : NBR_SUPPORT_PICO, # le nombre du support dans le bac avant le demarrage
+}
+"""
+
 SUPPORT_PICO = {
     "nom"            : "Support Pico",
     "plan_prise"     : PLAN_SUP_PICO,
@@ -133,7 +162,7 @@ SUPPORT_PICO = {
     "fermeture_prise": 0,
     "ouverture_pose" : 47,
     "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_pile_support_pico.json"),
-    "nb_support"     : NBR_SUPPORT_PICO,
+    "nb_support"     : NBR_SUPPORT_PICO, 
 }
 
 SUPPORT_L298N = {
@@ -195,6 +224,29 @@ SUPPORT_SUP_POWERBANK = {
 # ouverture_prise/pose : ouverture de la pince (mm)
 # nb_par_cycle : nombre de pieces par cycle
 # etat_file : fichier JSON pour sauvegarder l'avancement
+
+"""
+BRIDE_MOTEUR = {
+    "nom"            : "Bride moteur",
+    "plan_prise"     : PLAN_BRIDE, # repere de la grille bride moteur         
+    "pt_origine"     : [0.024,0.045,0.012,2.319,-2.181,0.022], # premier point de prise dans le repere grille 
+    "pas_x"          : 0.096, # l'incrementation sur laxe x
+    "pas_y"          : 0.087,  # l'incrementation sur laxe y
+    "nb_lignes"      : 2, # nombre d'element dans la matrice ligne
+    "nb_colonnes"    : 2, # nombre d'element dans la matrice colonne
+    "sauter_centre"  : False, # false : pour ne pas sauter le centre de la grille et true : pour sauter le centre
+    "plan_pose"      : PLAN_DESSOUS, # repere plaque en dessous
+    "pts_pose"       : [
+        [0.00226,0.09022,-0.00975,0.028,0.038,1.514], # point de pose pour le 1er bride dans le repere plaque 
+        [0.15641,0.09190,-0.00975,0.027,-0.007,-1.639], # point de pose pour le 2eme bride dans le repere plaque
+    ],
+    "ouverture_prise": 50, # ouverture de la pince pour la prise
+    "fermeture_prise": 0, # fermeture de la pince
+    "ouverture_pose" : 55, # ouverture de la pince pour lacher
+    "nb_par_cycle"   : 2, # nombre de bride dans un meme cycle
+    "etat_file"      : os.path.join(DOSSIER_ETATS, "etat_grille_bride_moteur.json"),
+}
+"""
 
 BRIDE_MOTEUR = {
     "nom"            : "Bride moteur",

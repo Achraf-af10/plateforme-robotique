@@ -6,21 +6,25 @@ ROBOT_IP = "10.120.0.12"
 
 # Repere platforme
 # Lire dans : Installation → Features → Plan_dessous
+
+# repere plateforme de travail (dessous)
 PLAN_DESSOUS = [
-    -0.6201871248013155, -0.17022384174839322, 0.13728289143765787,
-    -0.02843274018595616, -3.1228127121417564, -0.007974036513873867
+    -0.5970260916850079, -0.17030350362133234, 0.1378430066594293,
+    -0.025410328826241283, -3.1186158149200596, -0.0002425257151249174
 ]
-
+# repere plateforme de travail (dessus)
 PLAN_DESSUS = [
-    -0.617124325993609, 0.11788606607871682, 0.1306854902945708,
-    -0.005727143696167871, -3.1062139314218142, 0.013074394878630968
+    -0.5929315104498629, 0.11775699369668326, 0.13595769370944163,
+    -0.013090051889887456, -3.1244074003359943, -0.0039059555192904618
 ]
 
+# repere grille vis
 PLAN_GRILLE_VIS = [
     -0.8959161713090482, 0.23576517757556736, 0.06596752920688348,
     0.001081517660900019, -0.0004957462252589081, 3.141363497313716
 ]
 
+#repere grille entretoise
 PLAN_GRILLE_ENTRETOISE = [
     -0.8972415661796301, 0.1560410116680353, 0.0600358198893394,
     0.0013067249844254877, -0.001012514419109025, -3.1283547476391584
@@ -34,6 +38,10 @@ PLAN_GABARIT=[0, 0, 0, 0, 0, 0]
 DEPART_P = [-0.3956864294453475, 0.17756706448267412, 0.40527805128328587, -3.1346503212880057, 0.020412230169718736, 0.05712481823912654]
 DEPART_Q = [3.150883197784424, -0.8645792764476319, -2.237497568130493, -3.1444417438902796, -1.5488246122943323, 4.710142612457275]
 
+##########################################
+# visseuse : parametres de vissage
+##########################################
+
 # Vitesses de mouvement
 SPEED_J      = 0.349066              # rad/s
 ACC_J        = 0.261799              # rad/s²
@@ -42,6 +50,8 @@ ACC_L_FAST   = 0.3                   # m/s²
 SPEED_L_SLOW = 0.02                  # m/s — approche lente
 ACC_L_SLOW   = 0.015                 # m/s²
 APPROACH_Z   = 0.05                  # m — hauteur approche au dessus du trou
+SPEED_L_PICKUP = 0.2
+ACC_L_PICKUP   = 0.15
 
 
 
@@ -58,8 +68,7 @@ ATT_PRES_VIS_P    = [-0.183842896087681, -0.3303056674200616, 0.1303807770296967
 POS_RECUP_VIS_P   = [-0.18383460381880662, -0.33032291856269497, 0.1068219865477667, 2.1648972497081194, 2.2721188342461427, 0.051841055658842304]
 
 
-SPEED_L_PICKUP = 0.2
-ACC_L_PICKUP   = 0.15
+
 
 CAPTEUR_PRES_VIS_PIN = 0  # entrée digitale
 
@@ -80,6 +89,34 @@ os.makedirs(DOSSIER_ETATS, exist_ok=True)
 # length   : longueur de vissage en mm
 # torque_nm: couple cible en Nm
 # sleep    : True = attendre le distributeur apres vissage
+
+################################################################
+# declarer les point ou on vis
+################################################################
+
+
+"""
+VIS_SUP_PICO = [
+    {
+        "nom"     : "Vis 5 SUP_PICO",
+        "plan"    : PLAN_DESSOUS,# repere 
+        "pos_p"   : [0.020, 0.120, -0.0070, 0 ,0 ,3.016], # point de vissage du vis 1 dans le repere de la plateforme en dessous
+        "shank_mm": 40, # la sortie de la tige avant d'arriver point de vissage
+        "length"  : 4.0, # longeur de vissage du vis
+        "torque_nm":0.15, # couple de vissage
+        "sleep"   : False, # false pour ne attendre un temp avant de prendre le vis
+    },
+    {
+        "nom"     : "Vis 7 SUP_PICO",
+        "plan"    : PLAN_DESSOUS,
+        "pos_p"   : [0.0, 0.180, -0.0070, 0 ,0 ,3.016],
+        "shank_mm": 40,
+        "length"  : 4.0,
+        "torque_nm":0.15,
+        "sleep"   : False,
+    }
+]
+"""
 
 VIS_SUP_PICO = [
     {
@@ -316,6 +353,26 @@ VIS_SUP_POWERBANK = [
 # nb_lignes, nb_colonnes : taille de la grille
 # sauter_centre : True pour ignorer le centre
 # etat_file : fichier JSON pour sauvegarder l'avancement
+
+################################################################
+# declarer les point ou on prendre les vis et entretoise
+################################################################
+
+"""
+GRILLE_VIS_8X8 = {
+    "nom"          : "Grille vis 8x8",
+    "plan"         : PLAN_GRILLE_VIS, # repere de la grille des vis
+    "pt_origine"   : [0.0, 0.0, -0.008, 0.02, 3.142, 0.0], # premier point du 1er vis
+    "shank_mm"     : 30, # position de la tige du tournevis avant de prendre le vis
+    "scew_length"  : 15.0, # langeur du vis
+    "pas_x"        : 0.010, # # l'incrementation sur laxe x
+    "pas_y"        : 0.010, # l'incrementation sur laxe y
+    "nb_lignes"    : 8, # nombre de vis dans la matrice ligne
+    "nb_colonnes"  : 8, # nombre de vis dans la matrice colonne
+    "sauter_centre": False, # false : pour ne pas sauter le centre de la grille et true : pour sauter le centre
+    "etat_file"    : os.path.join(DOSSIER_ETATS, "etat_grille_vis_8x8.json"),
+}
+"""
 
 GRILLE_VIS_8X8 = {
     "nom"          : "Grille vis 8x8",

@@ -17,6 +17,20 @@ import config_ur12e
 robot = UR12e(ip="10.120.0.12")
 
 # Définir les tâches disponibles
+"""
+TASKS = {
+    "cycle_vissage_entretoises_pico": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_ENTRETOISE_SUP_PICO, grille=config_ur12e.GRILLE_ENTRETOISE_8X8), # pour les vis qu'ils sont dans une grille
+    "cycle_vissage_entretoises_l298n": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_ENTRETOISE_SUP_L298N, grille=config_ur12e.GRILLE_ENTRETOISE_8X8),
+    "cycle_vissage_bride": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_BRIDE_MOTEUR, grille=config_ur12e.GRILLE_VIS_8X8),
+    "cycle_vissage_sup_pico": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP_PICO), # pour les vis qu'ils sont dans le distributeur
+    "cycle_vissage_sup_l298n": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP_L298N),
+    "cycle_vissage_entretoises_raspi": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_ENTRETOISE_SUP1_RASPI, grille=config_ur12e.GRILLE_ENTRETOISE_8X8),
+    "cycle_vissage_sup1_raspi": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP1_RASPI),
+    "cycle_vissage_sup2_raspi": lambda data: cycle_vissage(robot,vis_list=config_ur12e.VIS_SUP2_RASPI),
+    "cycle_vissage_sup_powerbank": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_SUP_POWERBANK, grille=config_ur12e.GRILLE_VIS_8X8),
+}
+"""
+
 TASKS = {
     "cycle_vissage_entretoises_pico": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_ENTRETOISE_SUP_PICO, grille=config_ur12e.GRILLE_ENTRETOISE_8X8),
     "cycle_vissage_entretoises_l298n": lambda data: cycle_vissage_grille(robot,vis_list=config_ur12e.VIS_ENTRETOISE_SUP_L298N, grille=config_ur12e.GRILLE_ENTRETOISE_8X8),

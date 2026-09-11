@@ -54,7 +54,7 @@ def _prendre_vis(robot, vis):
     # Prise de la vis
     retval = pick_screw(
         z_force_n=Z_FORCE_N,
-        screw_length_mm=8.0,                                                                                    ######## A AJUSTER SELON LA VIS
+        screw_length_mm=8.0,
         tool_index=0,
     )
 
@@ -112,7 +112,9 @@ def _visser_une_vis(robot, vis):
     print(f"  {vis['nom']} → NON serree")
     return False
 
-
+#######################################################################
+# cycle vissage des vis prises au poste distributeur
+#######################################################################
 def cycle_vissage(robot, vis_list):
     """Scénario principal : cycle de vissage de toutes les vis."""
 
@@ -219,7 +221,9 @@ def _visser_une_vis_grille(robot, vis, grille, indice):
     print(f"  {vis['nom']} → NON serree")
     return False
 
-
+#######################################################################
+# cycle vissage des vis prises dans une grille (pas de poste distributeur)
+#######################################################################
 def cycle_vissage_grille(robot, vis_list, grille):
     """
     Scénario principal grille : visse toutes les vis de vis_list, chacune

@@ -21,7 +21,7 @@ PLANS = {
     "Plan_entretoise" : "PLAN_GRILLE_ENTRETOISE",
 }
 
-# cree plan gabarit "gabarit" : "PLAN_GABARIT"
+# cree plan gabarit "gabarit" : "PLAN_GABARIT",
 
 
 def recuperer_script():
