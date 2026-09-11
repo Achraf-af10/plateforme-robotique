@@ -21,6 +21,8 @@ PLANS = {
     "Plan_entretoise" : "PLAN_GRILLE_ENTRETOISE",
 }
 
+# cree plan gabarit "gabarit" : "PLAN_GABARIT"
+
 
 def recuperer_script():
     """Recupere le fichier .script depuis le robot via SSH."""

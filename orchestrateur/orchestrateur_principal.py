@@ -17,6 +17,7 @@ if ETAT_DEPART != "idle":
     orchestrateur.machine.set_state(ETAT_DEPART)
     print(f"[TEST] Démarrage forcé à l'état : {ETAT_DEPART}")
 
+# changer nom des etats
 CMD_TOPICS = {
     "ur12e_vers_a": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_entretoises_pico"}),
     "ur12e_vers_b": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_entretoises_l298n"}),
@@ -26,7 +27,6 @@ CMD_TOPICS = {
     "ur12e_vers_4": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_pico"}),
     "ur5_vers_5":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup_l298N"}),
     "ur12e_vers_6": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup_l298n"}),
-    "ur5_vers_7":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_carte_l298N"}),
     "ur12e_vers_8": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_entretoises_raspi"}),
     "ur5_vers_9":   ("cell/robot/ur5/cmd",   {"task": "cycle_pose_sup1_raspi"}),
     "ur12e_vers_10": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_sup1_raspi"}),
@@ -45,7 +45,6 @@ NEXT_TRANSITION = {
     ("ur12e", "ur12e_vers_4"): "4_reached",
     ("ur5", "ur5_vers_5"):     "5_reached",
     ("ur12e", "ur12e_vers_6"): "6_reached",
-    ("ur5", "ur5_vers_7"):     "7_reached",
     ("ur12e", "ur12e_vers_8"): "8_reached",
     ("ur5", "ur5_vers_9"):     "9_reached",
     ("ur12e", "ur12e_vers_10"): "10_reached",
@@ -57,15 +56,14 @@ NEXT_TRANSITION = {
 
 # definir les états pour lesquels on souhaite une pause avant d'envoyer la commande suivante
 ETATS_AVEC_PAUSE = {
-    "ur5_vers_1",
-    "ur5_vers_9",
-    "ur12e_vers_8"
+    "ur5_vers_1",  #changement outil de visseuse
+    "ur5_vers_9",  #changement outil de visseuse
+    "ur12e_vers_8" #retourner la plateforme pour visser les entretoises du raspi
 }
 
 def nettoyer_messages_retenus(client):
     for state, (topic, _) in CMD_TOPICS.items():
         client.publish(topic, "", retain=True)
-    print("[INIT] Messages retenus effacés")
 
 def attendre_confirmation():
     print(f"\n[PAUSE] Prochaine étape : {orchestrateur.state}")
@@ -105,6 +103,7 @@ def on_message(client, userdata, msg):
         getattr(orchestrateur, trigger)()
         publish_current_task(client)
 
+# connection au broker MQTT
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message

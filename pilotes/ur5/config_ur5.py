@@ -4,56 +4,67 @@
 # Plans recuperes automatiquement depuis le UR5
 # Ne pas modifier manuellement — utiliser get_plan_ur5.py
 
+# repere carte de puissance 
 PLAN_L298N = [
     0.415903306268062, -0.07486306829076779, 0.05465168074659954,
     -0.008131726064734859, 0.017557777516270336, 0.0054037504545519964
 ]
 
+# repere support/bac carte de puissance 
 PLAN_SUP_L298N = [
     0.2562467641138699, 0.09920256668604434, 0.055536531126466615,
     -0.0019555601837086723, 0.013505038736854977, -0.002841691350030972
 ]
 
+# repere support/bac bride moteur
 PLAN_BRIDE = [
     0.2563598750350642, -0.3273909117038984, 0.05520876180801251,
     -0.003412665908788886, 0.010066900703302767, 0.007294522318518194
 ]
 
+# repere carte raspi
 PLAN_RASPICO = [
     0.272262598728248, -0.09052280840919583, 0.05644844971717855,
     -0.005162769265000687, 0.016353342367265992, -0.00030046083438544486
 ]
 
+# repere support/bac 1er raspi
 PLAN_SUP1_RASPI = [
     0.44696745719701236, 0.1094156381029779, 0.05389176556424652,
     -0.01934341140814349, 0.0166623448550298, -0.010560650648341465
 ]
 
+# repere support/bac 2eme raspi
 PLAN_SUP2_RASPI = [
     0.5418029391239041, 0.1104409937493441, 0.05141458056262299,
     -0.0009514948178343949, 0.0019357807367525546, -0.017003141162686693
 ]
 
+# repere support/bac pico
 PLAN_SUP_PICO = [
     0.35276375251640946, 0.12889604756514322, 0.0549147599521477,
     -0.013843029690566685, 0.012922776532877236, 0.0010137306167365115
 ]
 
+# repere plateforme de travail (dessous)
 PLAN_DESSOUS = [
     0.2112721411868312, 0.6959759490037689, 0.1413041916305522,
     -2.202032924142858, 2.236323032983556, 0.000479078094893015
 ]
 
+# repere plateforme de travail (dessus)
 PLAN_DESSUS = [
     -0.07738892688247738, 0.6995597621960921, 0.13452491514305923,
     -2.220029598242967, 2.221592380709402, -0.02597228620567457
 ]
 
+# repere support/bac powerbank
 PLAN_SUP_POWERBANK = [
     0.5514372245348925, -0.26646787136559186, 0.0542527492397433,
     -0.005961115416691898, 0.01769347385032139, 0.002110721612619694
 ] 
 
+# repere carte raspi4
 PLAN_RASPI4 = [
     0.6902320296656295, -0.11956113570840263, 0.05131808148261274,
     -0.004514018244157369, 0.017019741012314994, -0.0030428364174377876
@@ -64,6 +75,9 @@ DEPART_Q = [
     2.3968450477696024e-05, -1.570796314870016, -1.57074481645693,
     -1.5707839171039026, 1.570831537246704, 5.992112710373476e-05
 ]
+"""
+PLAN_GABARIT=[0, 0, 0, 0, 0, 0]
+"""
 
 # Vitesses de mouvement
 SPEED_J       = 0.5
@@ -72,7 +86,7 @@ SPEED_L_SLOW  = 0.02
 ACC_L_SLOW    = 0.04
 SPEED_L_RETRAIT = 0.15
 ACC_L_RETRAIT   = 0.15
-SPEED_L_RAPIDE = 0.25 #
+SPEED_L_RAPIDE = 0.25 
 ACC_L_RAPIDE   = 0.5
 
 # Geometrie & Piles
@@ -94,9 +108,9 @@ TIMEOUT_CONTACT  = 20.0   # s
 PINCE_FORCE = 80
 PINCE_SPEED = 100
 
-SPEED_SLIDER = 0.9
+SPEED_SLIDER = 0.9 # no used
 
-# Declaration des supports
+# Declaration des supports/bacs
 # plan_prise / plan_pose : reperes ou sont exprimes pt_prise / pt_pose
 # pt_prise, pt_pose      : [x, y, z, rx, ry, rz] dans leur repere local
 # ouverture_prise/pose/fermeture_prise   : ouverture de pince (mm) a la prise / a la pose
@@ -174,7 +188,7 @@ SUPPORT_SUP_POWERBANK = {
     "nb_support"     : NBR_SUPPORT_POWERBANK,
 }
 
-
+# grille
 # Grille de pieces : position de depart, ecart, dimensions et centre a ignorer
 # plan_prise / plan_pose : reperes pour la prise et la pose
 # pts_pose : positions de pose des pieces
@@ -194,7 +208,7 @@ BRIDE_MOTEUR = {
     "plan_pose"      : PLAN_DESSOUS,
     "pts_pose"       : [
         [0.00226,0.09022,-0.00975,0.028,0.038,1.514],
-        [0.15763,0.08900,-0.00975,0.026,-0.0071,-1.658], 
+        [0.15641,0.09190,-0.00975,0.027,-0.007,-1.639], 
     ],
     "ouverture_prise": 50,
     "fermeture_prise": 0,

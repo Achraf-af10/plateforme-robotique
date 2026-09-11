@@ -17,14 +17,18 @@ PLAN_DESSUS = [
 ]
 
 PLAN_GRILLE_VIS = [
-    -0.8968699488463066, 0.23633764124236756, 0.060480630153114556,
-    0.0008079442261218299, -0.06643225047412703, -3.13094908898571
+    -0.8959161713090482, 0.23576517757556736, 0.06596752920688348,
+    0.001081517660900019, -0.0004957462252589081, 3.141363497313716
 ]
 
 PLAN_GRILLE_ENTRETOISE = [
     -0.8972415661796301, 0.1560410116680353, 0.0600358198893394,
     0.0013067249844254877, -0.001012514419109025, -3.1283547476391584
 ]
+
+"""
+PLAN_GABARIT=[0, 0, 0, 0, 0, 0]
+"""
 
 # Position de depart du robot
 DEPART_P = [-0.3956864294453475, 0.17756706448267412, 0.40527805128328587, -3.1346503212880057, 0.020412230169718736, 0.05712481823912654]
@@ -88,15 +92,6 @@ VIS_SUP_PICO = [
         "sleep"   : False,
     },
     {
-        "nom"     : "Vis 6 SUP_PICO",
-        "plan"    : PLAN_DESSOUS,
-        "pos_p"   : [0.020, 0.180, -0.0070, 0 ,0 ,3.016],
-        "shank_mm": 40,
-        "length"  : 4.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
-    {
         "nom"     : "Vis 7 SUP_PICO",
         "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.0, 0.180, -0.0070, 0 ,0 ,3.016],
@@ -112,24 +107,6 @@ VIS_SUP_L298N = [
         "nom"     : "Vis 1 SUP_L298N",
         "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.050, 0.120, -0.0070, 0 ,0 ,3.016],
-        "shank_mm": 40,
-        "length"  : 4.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
-    {
-        "nom"     : "Vis 2 SUP_L298N",
-        "plan"    : PLAN_DESSOUS,
-        "pos_p"   : [0.050, 0.180, -0.0070, 0 ,0 ,3.016],
-        "shank_mm": 40,
-        "length"  : 4.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
-    {
-        "nom"     : "Vis 3 SUP_L298N",
-        "plan"    : PLAN_DESSOUS,
-        "pos_p"   : [0.110, 0.120, -0.0070, 0 ,0 ,3.016],
         "shank_mm": 40,
         "length"  : 4.0,
         "torque_nm":0.15,
@@ -153,8 +130,8 @@ VIS_BRIDE_MOTEUR = [
         "plan"    : PLAN_DESSOUS,
         "pos_p"   : [-0.0075, 0.0580, -0.0010, 0,0,3.016],
         "shank_mm": 35,
-        "length"  : 9.0,
-        "torque_nm":0.15,
+        "length"  : 10.0,
+        "torque_nm":0.2,
         "sleep"   : False,
     },
     {
@@ -162,8 +139,8 @@ VIS_BRIDE_MOTEUR = [
         "plan"    : PLAN_DESSOUS,
         "pos_p"   : [0.1675, 0.0580, -0.0010, 0, 0, 3.016],
         "shank_mm": 35,
-        "length"  : 9.0,
-        "torque_nm":0.15,
+        "length"  : 10.0,
+        "torque_nm":0.2,
         "sleep"   : False,
     }
 ]
@@ -173,24 +150,6 @@ VIS_SUP1_RASPI= [
         "nom"     : "Vis 1 SUP1_RASPI",
         "plan"    : PLAN_DESSUS,
         "pos_p"   : [0.110, 0.140, -0.0080, 0 ,0 ,3.039],
-        "shank_mm": 40,
-        "length"  : 4.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
-    {
-        "nom"     : "Vis 2 SUP1_RASPI",
-        "plan"    : PLAN_DESSUS,
-        "pos_p"   : [0.110, 0.180, -0.0080, 0 ,0 ,3.039],
-        "shank_mm": 40,
-        "length"  : 4.0,
-        "torque_nm":0.15,
-        "sleep"   : False,
-    },
-    {
-        "nom"     : "Vis 3 SUP1_RASPI",
-        "plan"    : PLAN_DESSUS,
-        "pos_p"   : [0.150, 0.140, -0.0080, 0 ,0 ,3.039],
         "shank_mm": 40,
         "length"  : 4.0,
         "torque_nm":0.15,
@@ -361,7 +320,7 @@ VIS_SUP_POWERBANK = [
 GRILLE_VIS_8X8 = {
     "nom"          : "Grille vis 8x8",
     "plan"         : PLAN_GRILLE_VIS,
-    "pt_origine"   : [0.0, 0.0, -0.008, 0.111,-3.138,0.067],
+    "pt_origine"   : [0.0, 0.0, -0.008, 0.02, 3.142, 0.0],
     "shank_mm"     : 30,
     "scew_length"  : 15.0,
     "pas_x"        : 0.010, 

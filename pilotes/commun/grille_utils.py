@@ -5,7 +5,9 @@
 import json
 import os
 
-
+# calculer la liste des positions de la grille (vis, entretoises, les cartes ...), ligne par ligne, en sautant la case centrale si sauter_centre=True (grille impaire uniquement)
+# bacs sauter centre : carte puissance, pico
+# bacs sans sauter centre : bride moteur, vis, entretoises
 def positions_grille(grille):
     """
     Calcule la liste des points [x, y, z, rx, ry, rz], ligne par ligne,

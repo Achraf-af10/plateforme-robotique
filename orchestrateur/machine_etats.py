@@ -11,7 +11,6 @@ class OrchestratorCellule:
         "ur12e_vers_4",
         "ur5_vers_5",
         "ur12e_vers_6",
-        "ur5_vers_7",
         "ur12e_vers_8",
         "ur5_vers_9",
         "ur12e_vers_10",
@@ -23,6 +22,7 @@ class OrchestratorCellule:
         "error",
     ]
 
+# a -> b -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14
     def __init__(self):
         self.machine = Machine(model=self, states=self.states, initial="idle")
 
@@ -35,8 +35,7 @@ class OrchestratorCellule:
         self.machine.add_transition("3_reached", "ur5_vers_3", "ur12e_vers_4")
         self.machine.add_transition("4_reached", "ur12e_vers_4", "ur5_vers_5")
         self.machine.add_transition("5_reached", "ur5_vers_5", "ur12e_vers_6")
-        self.machine.add_transition("6_reached", "ur12e_vers_6", "ur5_vers_7")
-        self.machine.add_transition("7_reached", "ur5_vers_7", "ur12e_vers_8")
+        self.machine.add_transition("6_reached", "ur12e_vers_6", "ur12e_vers_8")
         self.machine.add_transition("8_reached", "ur12e_vers_8", "ur5_vers_9")
         self.machine.add_transition("9_reached", "ur5_vers_9", "ur12e_vers_10")
         self.machine.add_transition("10_reached", "ur12e_vers_10", "ur5_vers_11")
