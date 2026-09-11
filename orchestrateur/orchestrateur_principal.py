@@ -17,7 +17,6 @@ if ETAT_DEPART != "idle":
     orchestrateur.machine.set_state(ETAT_DEPART)
     print(f"[TEST] Démarrage forcé à l'état : {ETAT_DEPART}")
 
-# changer nom des etats
 CMD_TOPICS = {
     "ur12e_vers_a": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_entretoises_pico"}),
     "ur12e_vers_b": ("cell/robot/ur12e/cmd", {"task": "cycle_vissage_entretoises_l298n"}),
@@ -54,11 +53,10 @@ NEXT_TRANSITION = {
     ("ur12e", "ur12e_vers_14"): "14_reached",
 }
 
-# definir les états pour lesquels on souhaite une pause avant d'envoyer la commande suivante
 ETATS_AVEC_PAUSE = {
-    "ur5_vers_1",  #changement outil de visseuse
-    "ur5_vers_9",  #changement outil de visseuse
-    "ur12e_vers_8" #retourner la plateforme pour visser les entretoises du raspi
+    "ur5_vers_1",   # changement outil de visseuse
+    "ur5_vers_9",   # changement outil de visseuse
+    "ur12e_vers_8", # retourner la plateforme pour visser les entretoises du raspi
 }
 
 def nettoyer_messages_retenus(client):
@@ -79,15 +77,21 @@ def publish_current_task(client):
     elif orchestrateur.state == "done":
         print("Cycle terminé.")
 
+premiere_connexion = True
+
 def on_connect(client, userdata, flags, rc):
+    global premiere_connexion
     print("Connecté au broker, code:", rc)
     client.subscribe("cell/robot/+/status")
-    nettoyer_messages_retenus(client)
 
-    if ETAT_DEPART == "idle":
-        orchestrateur.start()
-
-    publish_current_task(client)
+    if premiere_connexion:
+        nettoyer_messages_retenus(client)
+        if ETAT_DEPART == "idle":
+            orchestrateur.start()
+        publish_current_task(client)
+        premiere_connexion = False
+    else:
+        print("[RECONNEXION] Pas de republication, on continue où on en était.")
 
 def on_message(client, userdata, msg):
     data = json.loads(msg.payload.decode())
@@ -103,7 +107,6 @@ def on_message(client, userdata, msg):
         getattr(orchestrateur, trigger)()
         publish_current_task(client)
 
-# connection au broker MQTT
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
